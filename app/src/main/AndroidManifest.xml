@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="cz.ackee.skeleton"
+<manifest package="cz.ackee.cookbook"
           xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
-        android:name=".App"
+        android:name="cz.ackee.cookbook.App"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="${appName}${appNameSuffix}"
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup">
         <activity
-            android:name=".screens.main.MainActivity"
+            android:name="cz.ackee.cookbook.screens.main.MainActivity"
             android:theme="@style/AppTheme.BrandedLaunch">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".screens.base.activity.FragmentActivity"/>
+        <activity android:name="cz.ackee.cookbook.screens.base.activity.FragmentActivity"/>
 
     </application>
 

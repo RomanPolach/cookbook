@@ -6,7 +6,6 @@ buildscript {
         jcenter()
         mavenCentral()
         maven("https://maven.fabric.io/public")
-        maven(url = "https://dl.bintray.com/ackeecz/gradle-plugin")
     }
 
     dependencies {

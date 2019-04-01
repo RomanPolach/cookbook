@@ -1,4 +1,4 @@
-package cz.ackee.skeleton;
+package cz.ackee.cookbook;
 
 import org.junit.Test;
 

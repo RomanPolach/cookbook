@@ -1,0 +1,19 @@
+/*
+ * Ribbonizer plugin is not configurable from kotlin because its Extension is not public :facepalm:
+ */
+ribbonizer {
+    // non-debuggable builds (like beta builds) are not enabled by default so we need to force them
+    // TODO change this list according to your flavors
+    forcedVariantsNames "devApiBeta", "prodApiBeta"
+
+    builder { variant, iconFile ->
+        // change ribbon colors by product flavors
+        if (variant.flavorName == "devApi") {
+            return customColorRibbonFilter(variant, iconFile, "#FFE503")
+        } else if (variant.flavorName == "prodApi") {
+            return customColorRibbonFilter(variant, iconFile, "#08C93F")
+        } else {
+            return null
+        }
+    }
+}

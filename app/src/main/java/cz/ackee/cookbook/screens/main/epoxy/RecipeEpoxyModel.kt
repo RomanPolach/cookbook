@@ -59,7 +59,7 @@ class RecipeLayout(parent: ViewGroup) : ViewLayout(parent) {
                 titleText = titleTextView().lparams(width = wrapContent)
 
                 image = imageView {
-                    setImageResource(R.drawable.img_small)
+                    setImageResource(R.drawable.img_logo_small)
                 }
                 myRatingBar = ratingBar() {
                     progressDrawable = drawable(R.drawable.ratingbar_selector)
@@ -72,7 +72,7 @@ class RecipeLayout(parent: ViewGroup) : ViewLayout(parent) {
                 }.lparams(width = wrapContent, height = wrapContent)
 
                 timeText = textView {
-
+                    textColor = color(R.color.hockeyapp_text_black)
                 }
 
                 divider = view {
@@ -99,7 +99,7 @@ class RecipeLayout(parent: ViewGroup) : ViewLayout(parent) {
                     )
 
                     timeText.connect(
-                        LEFT to RIGHT of clockImage with dip(16),
+                        LEFT to RIGHT of clockImage with dip(10),
                         TOP to BOTTOM of myRatingBar,
                         BOTTOM to BOTTOM of clockImage
                     )

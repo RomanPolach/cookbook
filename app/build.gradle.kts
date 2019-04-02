@@ -143,6 +143,9 @@ dependencies {
     implementation("org.jetbrains.anko:anko-design:0.10.8")
     implementation("org.jetbrains.anko:anko-recyclerview-v7:0.10.8")
 
+    // Rating Bar
+    implementation("com.github.ome450901:SimpleRatingBar:1.4.3")
+
     // Hockey
     implementation("net.hockeyapp.android:HockeySDK:5.1.1")
 

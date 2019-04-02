@@ -76,7 +76,7 @@ class MainFragment : BaseFragment<ListLayout>() {
                     recipe {
                         id(it.id)
                         title(it.name)
-                        subtitle("${it.score} *")
+                        score("${it.score}")
                         time("${it.duration} ${getString(R.string.main_fragment_minutes)}")
                     }
                 }

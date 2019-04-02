@@ -91,13 +91,16 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:1.0.0")
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("com.google.android.material:material:1.1.0-alpha03")
-    implementation("androidx.constraintlayout:constraintlayout:1.1.3")
+
     implementation("androidx.lifecycle:lifecycle-runtime:2.0.0")
     implementation("androidx.lifecycle:lifecycle-extensions:2.0.0")
     kapt("androidx.lifecycle:lifecycle-compiler:2.0.0")
     implementation("androidx.room:room-runtime:2.0.0")
     implementation("androidx.room:room-rxjava2:2.0.0")
     kapt("androidx.room:room-compiler:2.0.0")
+
+    implementation("cz.ackee:anko-constraint-layout:0.6.7")
+    implementation("com.android.support.constraint:constraint-layout:1.1.0-beta5")
 
     // Firebase
     implementation("com.google.firebase:firebase-core:16.0.7")
@@ -126,6 +129,8 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.5.0")
     implementation("com.squareup.retrofit2:converter-moshi:2.5.0")
     implementation("com.squareup.retrofit2:adapter-rxjava2:2.5.0")
+    implementation("com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2")
+
 
     // Stetho
     implementation("com.facebook.stetho:stetho:1.5.0")

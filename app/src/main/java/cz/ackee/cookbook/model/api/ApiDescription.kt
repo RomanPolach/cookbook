@@ -1,6 +1,6 @@
 package cz.ackee.cookbook.model.api
 
-import io.reactivex.Single
+import kotlinx.coroutines.Deferred
 import retrofit2.http.GET
 
 /**
@@ -9,5 +9,5 @@ import retrofit2.http.GET
 interface ApiDescription {
 
     @GET("recipes")
-    fun getRecipes(): Single<List<Recipe>>
+    fun getRecipes(): Deferred<List<Recipe>>
 }

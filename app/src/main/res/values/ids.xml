@@ -4,4 +4,5 @@
     <item name="fragment_container" type="id"/>
     <item name="item_click_support" type="id"/>
     <item name="epoxy_view_layout" type="id"/>
+    <item name="constraint_layout" type="id"/>
 </resources>

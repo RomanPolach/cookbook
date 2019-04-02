@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:519297451523:android:5318112065aa03f4",
         "android_client_info": {
-          "package_name": "cz.ackee.androidskeleton"
+          "package_name": "cz.ackee.cookbook"
         }
       },
       "oauth_client": [
@@ -41,7 +41,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:519297451523:android:f1192b5ed8b4e08a",
         "android_client_info": {
-          "package_name": "cz.ackee.androidskeleton.beta"
+          "package_name": "cz.ackee.cookbook.beta"
         }
       },
       "oauth_client": [
@@ -72,7 +72,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:519297451523:android:64515d7d8ebbc83f",
         "android_client_info": {
-          "package_name": "cz.ackee.androidskeleton.debug"
+          "package_name": "cz.ackee.cookbook.debug"
         }
       },
       "oauth_client": [

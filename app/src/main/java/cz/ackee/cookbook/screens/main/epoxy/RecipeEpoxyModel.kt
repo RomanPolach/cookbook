@@ -65,7 +65,7 @@ class RecipeLayout(parent: ViewGroup) : ViewLayout(parent) {
                     progressDrawable = drawable(R.drawable.ratingbar_selector)
                     numStars = 5
                     progress = 3
-                }.lparams(width = wrapContent, height = wrapContent)
+                }.lparams(width = dip(200), height = wrapContent)
 
                 clockImage = imageView {
                     setImageResource(R.drawable.ic_time)

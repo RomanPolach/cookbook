@@ -5,76 +5,52 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import cz.ackee.cookbook.R
-import cz.ackee.cookbook.model.api.Recipe
-import cz.ackee.cookbook.model.repository.State
+import cz.ackee.cookbook.screens.addRecipe.AddRecipeViewModel
+import cz.ackee.cookbook.screens.addRecipe.epoxy.addRecipe
 import cz.ackee.cookbook.screens.base.fragment.BaseFragment
-import cz.ackee.cookbook.screens.layout.ListLayout
-import cz.ackee.extensions.rx.observeOnMainThread
-import org.jetbrains.anko.design.longSnackbar
+import cz.ackee.cookbook.screens.layout.AddRecipeLayout
+import org.jetbrains.anko.sdk21.coroutines.onClick
+import org.koin.android.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 /**
  * Main app fragment with list of Recipes
  */
 
-class AddRecipeFragment : BaseFragment() {
+class AddRecipeFragment : BaseFragment<AddRecipeLayout>() {
 
-    private val viewModel: MainViewModel by viewModel()
+    private val viewModel: AddRecipeViewModel by viewModel()
 
-    override fun createLayout(parent: Context) = ListLayout(parent)
+    override fun createLayout(parent: Context) = AddRecipeLayout(parent)
 
-    override fun ListLayout.viewCreated(savedState: Bundle?) {
-        disposables += viewModel.observeState()
-            .observeOnMainThread()
-            .subscribe { state ->
-                when (state) {
-                    is State.Empty -> {
-                        showProgress(false)
-                        showEmpty(true)
-                        showError(false)
-                    }
-                    is State.Loading -> {
-                        showProgress(true)
-                        showEmpty(false)
-                        showError(false)
-                    }
-                    is State.Reloading -> {
-                        showProgress(true)
-                        showEmpty(false)
-                        showError(false)
-                        addRecipes(state.previousData)
-                    }
-                    is State.Loaded -> {
-                        showProgress(false)
-                        showEmpty(false)
-                        showError(false)
-                        addRecipes(state.data)
-                    }
-                    is State.Error -> {
-                        showProgress(false)
-                        showEmpty(false)
-                        showError(true)
-                        view.longSnackbar(state.error.localizedMessage)
-                    }
-                }
-            }
-    }
+    private val ingredientsList: MutableList<String> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
 
-    private fun addRecipes(recipes: List<Recipe>?) {
-        layout.epoxyRecyclerView.buildModelsWith { controller ->
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        layout.buttonAdd.onClick {
+            ingredientsList.add(layout.inputIngredient.editText!!.text.toString())
+            layout.inputIngredient.editText!!.text.clear()
+            refreshIngredientsList()
+        }
+    }
+
+    fun refreshIngredientsList() {
+        layout.recyclerViewIngredients.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        layout.recyclerViewIngredients.buildModelsWith { controller ->
             with(controller) {
-                recipes?.forEach {
-                    recipe {
-                        id(it.id)
-                        title(it.name)
-                        subtitle("${it.score} *")
-                        time("${it.duration} ${getString(R.string.main_fragment_minutes)}")
+                ingredientsList.forEach {
+                    addRecipe {
+                        id(it)
+                        ingredientTitle(it)
                     }
                 }
             }

@@ -15,7 +15,6 @@ import cz.ackee.extensions.rx.observeOnMainThread
 import io.reactivex.rxkotlin.plusAssign
 import org.jetbrains.anko.design.longSnackbar
 import org.koin.android.viewmodel.ext.android.viewModel
-import timber.log.Timber
 
 /**
  * Main app fragment with list of Recipes
@@ -86,7 +85,7 @@ class MainFragment : BaseFragment<ListLayout>() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.add_recipe -> Timber.d("TODO")
+            R.id.add_recipe -> fragmentActivity?.replaceFragment(AddRecipeFragment())
         }
         return super.onOptionsItemSelected(item)
     }

@@ -4,6 +4,7 @@
     <color name="primaryDark">#303F9F</color>
     <color name="accent">#FF4081</color>
 
+    <color name="button_pink">#FF00FF</color>
     <color name="title_text">#0000FF</color>
     <color name="default_text">#222222</color>
     <color name="primary_button_text">#ffffff</color>

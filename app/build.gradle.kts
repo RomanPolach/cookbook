@@ -142,6 +142,9 @@ dependencies {
     // Rating Bar
     implementation("com.github.ome450901:SimpleRatingBar:1.4.3")
 
+    //RecyclerView Divider
+    implementation("com.github.fondesa:recycler-view-divider:2.0.1")
+
     // Hockey
     implementation("net.hockeyapp.android:HockeySDK:5.1.1")
 

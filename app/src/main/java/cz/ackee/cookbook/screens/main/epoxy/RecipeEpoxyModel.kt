@@ -45,7 +45,6 @@ class RecipeLayout(parent: ViewGroup) : ViewLayout(parent) {
     lateinit var txtTitle: TextView
     lateinit var scoreRatingBar: ScaleRatingBar
     lateinit var txtTime: TextView
-    lateinit var divider: View
 
     override fun createView(ui: AnkoContext<Context>): View {
         return with(ui) {
@@ -74,10 +73,6 @@ class RecipeLayout(parent: ViewGroup) : ViewLayout(parent) {
                     compoundDrawablePadding = dip(10)
                 }
 
-                divider = view {
-                    backgroundColor = color(R.color.material_grey_100)
-                }.lparams(width = matchParent, height = dip(3))
-
                 constraints {
                     imgLogo.connect(
                         STARTS of parentId,
@@ -98,12 +93,6 @@ class RecipeLayout(parent: ViewGroup) : ViewLayout(parent) {
                         START to END of imgLogo with dip(10),
                         TOP to BOTTOM of scoreRatingBar with dip(10),
                         BOTTOM to BOTTOM of imgLogo
-                    )
-
-                    divider.connect(
-                        TOP to BOTTOM of txtTime with dip(20),
-                        STARTS of parentId,
-                        ENDS of parentId
                     )
                 }
             }

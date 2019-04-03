@@ -1,7 +1,7 @@
 package cz.ackee.cookbook.model.repository
 
 import cz.ackee.cookbook.model.api.Recipe
-import cz.ackee.cookbook.model.api.exception.ExceptionMapperHelper
+import cz.ackee.cookbook.model.api.exception.resolveException
 import cz.ackee.cookbook.model.interactor.ApiInteractor
 
 /**
@@ -15,7 +15,7 @@ interface RecipeRepository {
     suspend fun getRecipeList(): List<Recipe>
 }
 
-class RecipeRepositoryImpl(val apiInteractor: ApiInteractor) : RecipeRepository, ExceptionMapperHelper {
+class RecipeRepositoryImpl(val apiInteractor: ApiInteractor) : RecipeRepository {
 
     suspend override fun getRecipeList(): List<Recipe> {
         return try {

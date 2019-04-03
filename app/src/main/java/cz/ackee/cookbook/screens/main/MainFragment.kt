@@ -20,7 +20,6 @@ import timber.log.Timber
 /**
  * Main app fragment with list of Recipes
  */
-
 class MainFragment : BaseFragment<ListLayout>() {
 
     private val viewModel: MainViewModel by viewModel()
@@ -64,11 +63,6 @@ class MainFragment : BaseFragment<ListLayout>() {
             }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
     private fun addRecipes(recipes: List<Recipe>?) {
         layout.epoxyRecyclerView.buildModelsWith { controller ->
             with(controller) {
@@ -76,7 +70,7 @@ class MainFragment : BaseFragment<ListLayout>() {
                     recipe {
                         id(it.id)
                         title(it.name)
-                        score("${it.score}")
+                        score(it.score)
                         time("${it.duration} ${getString(R.string.main_fragment_minutes)}")
                     }
                 }

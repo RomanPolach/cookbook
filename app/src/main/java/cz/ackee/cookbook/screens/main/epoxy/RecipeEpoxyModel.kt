@@ -3,7 +3,6 @@ package cz.ackee.cookbook.screens.main.epoxy
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.willy.ratingbar.ScaleRatingBar
@@ -11,6 +10,7 @@ import cz.ackee.ankoconstraintlayout.constraintLayout
 import cz.ackee.cookbook.R
 import cz.ackee.cookbook.utils.titleTextView
 import cz.ackee.extensions.android.color
+import cz.ackee.extensions.android.drawableLeft
 import cz.ackee.extensions.anko.layout.ViewLayout
 import cz.ackee.extensions.epoxy.EpoxyModelWithLayout
 import org.jetbrains.anko.*
@@ -24,8 +24,9 @@ open class RecipeEpoxyModel : EpoxyModelWithLayout<RecipeLayout>() {
     @EpoxyAttribute
     lateinit var title: String
 
+    @JvmField
     @EpoxyAttribute
-    var score: String? = null
+    var score: Float = 0f
 
     @EpoxyAttribute
     lateinit var time: String
@@ -33,19 +34,17 @@ open class RecipeEpoxyModel : EpoxyModelWithLayout<RecipeLayout>() {
     override fun createViewLayout(parent: ViewGroup) = RecipeLayout(parent)
 
     override fun RecipeLayout.bind() {
-        titleText.text = title
-        timeText.text = time
-        myRatingBar.rating = score?.toFloat() ?: 0f
+        txtTitle.text = title
+        txtTime.text = time
+        scoreRatingBar.rating = score
     }
 }
 
 class RecipeLayout(parent: ViewGroup) : ViewLayout(parent) {
 
-    lateinit var titleText: TextView
-    lateinit var image: ImageView
-    lateinit var myRatingBar: ScaleRatingBar
-    lateinit var clockImage: ImageView
-    lateinit var timeText: TextView
+    lateinit var txtTitle: TextView
+    lateinit var scoreRatingBar: ScaleRatingBar
+    lateinit var txtTime: TextView
     lateinit var divider: View
 
     override fun createView(ui: AnkoContext<Context>): View {
@@ -56,12 +55,12 @@ class RecipeLayout(parent: ViewGroup) : ViewLayout(parent) {
                 horizontalPadding = dip(16)
                 verticalPadding = dip(8)
 
-                titleText = titleTextView().lparams(width = wrapContent)
+                txtTitle = titleTextView().lparams(width = wrapContent)
 
-                image = imageView {
-                    setImageResource(R.drawable.img_logo_small)
-                }
-                myRatingBar = customView {
+                val imgLogo = imageView(R.drawable.img_logo_small)
+
+                scoreRatingBar = customView {
+                    setIsIndicator(true)
                     setNumStars(5)
                     starPadding = dip(3)
                     stepSize = 0.5f
@@ -69,12 +68,10 @@ class RecipeLayout(parent: ViewGroup) : ViewLayout(parent) {
                     setFilledDrawableRes(R.drawable.ic_star)
                 }
 
-                clockImage = imageView {
-                    setImageResource(R.drawable.ic_time)
-                }.lparams(width = wrapContent, height = wrapContent)
-
-                timeText = textView {
+                txtTime = textView {
                     textColor = color(R.color.hockeyapp_text_black)
+                    drawableLeft = R.drawable.ic_time
+                    compoundDrawablePadding = dip(10)
                 }
 
                 divider = view {
@@ -82,32 +79,31 @@ class RecipeLayout(parent: ViewGroup) : ViewLayout(parent) {
                 }.lparams(width = matchParent, height = dip(3))
 
                 constraints {
-                    image.connect(
-                        LEFTS of parentId
+                    imgLogo.connect(
+                        STARTS of parentId,
+                        TOPS of parentId
                     )
 
-                    titleText.connect(
+                    txtTitle.connect(
                         TOPS of parentId,
-                        LEFT to RIGHT of image with dip(16)
+                        START to END of imgLogo with dip(16)
                     )
 
-                    myRatingBar.connect(
-                        TOP to BOTTOM of titleText with dip(10),
-                        LEFT to RIGHT of image with dip(16)
-                    )
-                    clockImage.connect(
-                        TOP to BOTTOM of myRatingBar with dip(10),
-                        LEFTS of myRatingBar
+                    scoreRatingBar.connect(
+                        TOP to BOTTOM of txtTitle with dip(10),
+                        START to END of imgLogo with dip(16)
                     )
 
-                    timeText.connect(
-                        LEFT to RIGHT of clockImage with dip(10),
-                        TOP to BOTTOM of myRatingBar with dip(10),
-                        BOTTOM to BOTTOM of clockImage
+                    txtTime.connect(
+                        START to END of imgLogo with dip(10),
+                        TOP to BOTTOM of scoreRatingBar with dip(10),
+                        BOTTOM to BOTTOM of imgLogo
                     )
 
                     divider.connect(
-                        TOP to BOTTOM of clockImage with dip(20)
+                        TOP to BOTTOM of txtTime with dip(20),
+                        STARTS of parentId,
+                        ENDS of parentId
                     )
                 }
             }

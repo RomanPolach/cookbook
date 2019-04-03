@@ -17,7 +17,7 @@ class MainViewModel(val repository: RecipeRepository) : ScopedViewModel() {
         launch {
             recipeListStateObserver.loading()
             try {
-                recipeListStateObserver.loaded(repository.fetchRecipeList().await())
+                recipeListStateObserver.loaded(repository.getRecipeList())
             } catch (e: Exception) {
                 recipeListStateObserver.error(e)
             }

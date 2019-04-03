@@ -1,5 +1,6 @@
 package cz.ackee.cookbook.model.api.exception
 
+import com.squareup.moshi.JsonDataException
 import cz.ackee.cookbook.utils.isDebug
 import io.reactivex.Completable
 import io.reactivex.Observable
@@ -7,9 +8,7 @@ import io.reactivex.Single
 import retrofit2.HttpException
 import java.io.IOException
 
-/**
- * Helper for mapping Exceptions from api to our domain Exceptions
- */
+// Helpers for mapping Exceptions from api to our domain Exceptions
 interface ExceptionMapperHelper {
 
     /**
@@ -52,6 +51,7 @@ interface ExceptionMapperHelper {
         return when (err) {
             is HttpException -> httpExceptionMapper(err) ?: GeneralServerException(err.code())
             is IOException -> NoInternetConnectionException()
+            is JsonDataException -> err
             else -> UnexpectedError(err)
         }
     }

@@ -91,14 +91,12 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:1.0.0")
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("com.google.android.material:material:1.1.0-alpha03")
-
     implementation("androidx.lifecycle:lifecycle-runtime:2.0.0")
     implementation("androidx.lifecycle:lifecycle-extensions:2.0.0")
     kapt("androidx.lifecycle:lifecycle-compiler:2.0.0")
     implementation("androidx.room:room-runtime:2.0.0")
     implementation("androidx.room:room-rxjava2:2.0.0")
     kapt("androidx.room:room-compiler:2.0.0")
-
     implementation("cz.ackee:anko-constraint-layout:1.1.2")
     implementation("androidx.constraintlayout:constraintlayout:1.1.3")
 

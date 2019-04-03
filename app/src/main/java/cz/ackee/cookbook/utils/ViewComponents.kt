@@ -3,8 +3,8 @@ package cz.ackee.cookbook.utils
 import android.view.ViewManager
 import android.widget.Button
 import android.widget.TextView
-import cz.ackee.extensions.android.color
 import cz.ackee.cookbook.R
+import cz.ackee.extensions.android.color
 import org.jetbrains.anko.*
 
 /**

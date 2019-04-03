@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">KotlinSkeleton</string>
+    <string name="app_name">cookbook</string>
+    <string name="main_fragment_tooolbar_title">Recepty</string>
+    <string name="main_fragment_minutes">min.</string>
 </resources>

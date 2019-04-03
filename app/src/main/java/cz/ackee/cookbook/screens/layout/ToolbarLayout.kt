@@ -3,9 +3,9 @@ package cz.ackee.cookbook.screens.layout
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
+import cz.ackee.cookbook.R
 import cz.ackee.extensions.android.attrDimen
 import cz.ackee.extensions.anko.layout.ViewLayout
-import cz.ackee.cookbook.R
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.appcompat.v7.themedToolbar
 import org.jetbrains.anko.backgroundResource

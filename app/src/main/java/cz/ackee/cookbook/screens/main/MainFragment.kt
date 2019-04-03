@@ -2,24 +2,37 @@ package cz.ackee.cookbook.screens.main
 
 import android.content.Context
 import android.os.Bundle
-import cz.ackee.extensions.rx.observeOnMainThread
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import com.fondesa.recyclerviewdivider.RecyclerViewDivider
+import cz.ackee.cookbook.R
 import cz.ackee.cookbook.model.api.Recipe
 import cz.ackee.cookbook.model.repository.State
 import cz.ackee.cookbook.screens.base.fragment.BaseFragment
 import cz.ackee.cookbook.screens.layout.ListLayout
 import cz.ackee.cookbook.screens.main.epoxy.recipe
+import cz.ackee.extensions.android.color
+import cz.ackee.extensions.rx.observeOnMainThread
 import io.reactivex.rxkotlin.plusAssign
 import org.jetbrains.anko.design.longSnackbar
+import org.jetbrains.anko.support.v4.dip
 import org.koin.android.viewmodel.ext.android.viewModel
+import timber.log.Timber
 
 /**
- * Main app fragment
+ * Main app fragment with list of Recipes
  */
 class MainFragment : BaseFragment<ListLayout>() {
 
     private val viewModel: MainViewModel by viewModel()
 
-    override fun createLayout(parent: Context) = ListLayout(parent)
+    override fun createLayout(parent: Context) = ListLayout(parent, itemDecoration = RecyclerViewDivider.with(context!!)
+        .asSpace()
+        .color(color(R.color.divider))
+        .size(dip(2))
+        .hideLastDivider()
+        .build())
 
     override fun ListLayout.viewCreated(savedState: Bundle?) {
         disposables += viewModel.observeState()
@@ -65,12 +78,24 @@ class MainFragment : BaseFragment<ListLayout>() {
                     recipe {
                         id(it.id)
                         title(it.name)
-                        subtitle("${it.score} *")
+                        score(it.score)
+                        time("${it.duration} ${getString(R.string.main_fragment_minutes)}")
                     }
                 }
             }
         }
     }
 
-    override fun getTitle() = "Ackee Skeleton"
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.add_recipe -> Timber.d("TODO")
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_main, menu)
+    }
+
+    override fun getTitle() = getString(R.string.main_fragment_tooolbar_title)
 }

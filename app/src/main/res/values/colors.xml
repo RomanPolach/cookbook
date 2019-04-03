@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary">#3B426D</color>
+    <color name="primary">#FFFFFF</color>
     <color name="primaryDark">#303F9F</color>
     <color name="accent">#FF4081</color>
 
-    <color name="title_text">#000000</color>
+    <color name="divider">#ffe0e0e0</color>
+    <color name="title_text">#0000FF</color>
     <color name="default_text">#222222</color>
     <color name="primary_button_text">#ffffff</color>
     <color name="secondary_button_background">@color/accent</color>

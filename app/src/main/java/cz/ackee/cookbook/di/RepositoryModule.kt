@@ -1,7 +1,8 @@
 package cz.ackee.cookbook.di
 
-import cz.ackee.cookbook.model.repository.SampleRepository
-import cz.ackee.cookbook.model.repository.SampleRepositoryImpl
+import cz.ackee.cookbook.model.repository.RecipeRepository
+import cz.ackee.cookbook.model.repository.RecipeRepositoryImpl
+
 import org.koin.dsl.module.module
 
 /**
@@ -9,5 +10,5 @@ import org.koin.dsl.module.module
  */
 val repositoryModule = module {
 
-    single<SampleRepository> { SampleRepositoryImpl(apiInteractor = get()) }
+    single<RecipeRepository> { RecipeRepositoryImpl(apiInteractor = get()) }
 }

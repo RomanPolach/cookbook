@@ -1,6 +1,7 @@
 package cz.ackee.cookbook.di
 
 import com.facebook.stetho.okhttp3.StethoInterceptor
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
 import cz.ackee.cookbook.Constants.DEVICE_ID_NAME
 import cz.ackee.cookbook.model.api.AckeeInterceptor
@@ -18,7 +19,6 @@ import okhttp3.logging.HttpLoggingInterceptor.Level.NONE
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module.module
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 /**
@@ -41,7 +41,7 @@ val remoteModule = module {
     single {
         Retrofit.Builder()
             .baseUrl(ApiConfig.BASE_URL)
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .addConverterFactory(MoshiConverterFactory.create(
                 Moshi.Builder()
                     .add(Rfc3339ZonedDateTimeAdapter)

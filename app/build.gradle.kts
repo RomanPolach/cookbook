@@ -112,6 +112,12 @@ dependencies {
     implementation("com.airbnb.android:epoxy:3.0.0")
     kapt("com.airbnb.android:epoxy-processor:3.0.0")
 
+    //RecyclerView Divider
+    implementation("com.github.fondesa:recycler-view-divider:2.0.1")
+
+    //Rating Bar
+    implementation("com.github.ome450901:SimpleRatingBar:1.4.3")
+
     // Rx
     implementation("io.reactivex.rxjava2:rxjava:2.2.6")
     implementation("io.reactivex.rxjava2:rxandroid:2.1.0")

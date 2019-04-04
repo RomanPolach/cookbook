@@ -1,5 +1,6 @@
 package cz.ackee.cookbook.screens.addRecipe
 
+import cz.ackee.cookbook.model.api.NewRecipeRequest
 import cz.ackee.cookbook.model.api.Recipe
 import cz.ackee.cookbook.model.repository.RecipeRepository
 import cz.ackee.cookbook.model.repository.StateObserver
@@ -11,18 +12,18 @@ import kotlinx.coroutines.launch
  */
 class AddRecipeViewModel(val repository: RecipeRepository) : ScopedViewModel() {
 
-    private val recipeListStateObserver = StateObserver<List<Recipe>>()
+    private val addRecipeStateObserver = StateObserver<Recipe>()
 
-    init {
+    fun observeState() = addRecipeStateObserver.observeState()
+
+    fun onSendRecipeClick(recipe: NewRecipeRequest) {
         launch {
-            recipeListStateObserver.loading()
+            addRecipeStateObserver.loading()
             try {
-                recipeListStateObserver.loaded(repository.fetchRecipeList().await())
+                addRecipeStateObserver.loaded(repository.sendRecipe(recipe))
             } catch (e: Exception) {
-                recipeListStateObserver.error(e)
+                addRecipeStateObserver.error(e)
             }
         }
     }
-
-    fun observeState() = recipeListStateObserver.observeState()
 }

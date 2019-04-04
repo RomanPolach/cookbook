@@ -1,11 +1,10 @@
 package cz.ackee.cookbook.screens.layout
 
 import android.content.Context
-import android.view.Gravity
+import android.text.InputType
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.TextView
 import com.airbnb.epoxy.EpoxyRecyclerView
 import com.google.android.material.textfield.TextInputLayout
 import cz.ackee.cookbook.R
@@ -19,7 +18,7 @@ import cz.ackee.extensions.android.string
 import cz.ackee.extensions.anko.layout.ViewLayout
 import org.jetbrains.anko.*
 import org.jetbrains.anko.design.textInputEditText
-import org.jetbrains.anko.design.textInputLayout
+import org.jetbrains.anko.design.themedTextInputLayout
 import org.jetbrains.anko.support.v4.nestedScrollView
 
 /**
@@ -28,31 +27,24 @@ import org.jetbrains.anko.support.v4.nestedScrollView
 class AddRecipeLayout(parent: Context) : ViewLayout(parent) {
 
     lateinit var inputRecipeName: TextInputLayout
-
     lateinit var inputIntroText: TextInputLayout
-
-    lateinit var txtIngredient: TextView
-
     lateinit var recyclerViewIngredients: EpoxyRecyclerView
-
     lateinit var inputIngredient: TextInputLayout
-
-    lateinit var buttonAdd: Button
-
+    lateinit var btnAdd: Button
     lateinit var inputRecipe: TextInputLayout
-
     lateinit var inputTime: TextInputLayout
 
     override fun createView(ui: AnkoContext<Context>): View {
         return with(ui) {
             nestedScrollView {
                 verticalLayout {
-                    layoutParams = ViewGroup.LayoutParams(org.jetbrains.anko.matchParent, org.jetbrains.anko.matchParent)
                     id = R.id.constraint_layout
+                    layoutParams = ViewGroup.LayoutParams(org.jetbrains.anko.matchParent, org.jetbrains.anko.matchParent)
                     verticalPadding = dip(15)
                     horizontalPadding = dip(15)
 
-                    inputRecipeName = textInputLayout {
+                    inputRecipeName = themedTextInputLayout(R.style.TextInputLayoutAppearance) {
+                        setHintTextAppearance(R.style.Base_Widget_MaterialComponents_TextInputLayout_HintText)
                         hint = string(R.string.add_recipe_input_recipe_name)
 
                         textInputEditText {
@@ -63,7 +55,8 @@ class AddRecipeLayout(parent: Context) : ViewLayout(parent) {
                         topMargin = dip(26)
                     }
 
-                    inputIntroText = textInputLayout {
+                    inputIntroText = themedTextInputLayout(R.style.TextInputLayoutAppearance) {
+                        setHintTextAppearance(R.style.Base_Widget_MaterialComponents_TextInputLayout_HintText)
                         hint = string(R.string.add_recipe_input_intro_text)
 
                         textInputEditText {
@@ -75,8 +68,9 @@ class AddRecipeLayout(parent: Context) : ViewLayout(parent) {
                         bottomMargin = dip(26)
                     }
 
-                    txtIngredient = titleTextView {
+                    titleTextView {
                         text = string(R.string.add_recipe_ingredients_title)
+                        allCaps = true
                     }.lparams() {
                         topMargin = dip(10)
                     }
@@ -84,7 +78,8 @@ class AddRecipeLayout(parent: Context) : ViewLayout(parent) {
                     recyclerViewIngredients = epoxyRecyclerView {
                     }.lparams(width = matchParent, height = wrapContent)
 
-                    inputIngredient = textInputLayout {
+                    inputIngredient = themedTextInputLayout(R.style.TextInputLayoutAppearance) {
+                        setHintTextAppearance(R.style.Base_Widget_MaterialComponents_TextInputLayout_HintText)
                         hint = string(R.string.add_recipe_your_ingredients_hint)
 
                         textInputEditText {
@@ -95,17 +90,17 @@ class AddRecipeLayout(parent: Context) : ViewLayout(parent) {
                         topMargin = dip(26)
                     }
 
-                    buttonAdd = button {
+                    btnAdd = button {
                         textColor = color(R.color.button_pink)
                         drawableLeft = R.drawable.ic_add_small
                         background = drawable(R.drawable.rounded_button_shape)
                         text = string(R.string.add_recipe_button_add_title)
                     }.lparams(width = wrapContent) {
                         topMargin = dip(20)
-                        gravity = Gravity.CENTER
                     }
 
-                    inputRecipe = textInputLayout {
+                    inputRecipe = themedTextInputLayout(R.style.TextInputLayoutAppearance) {
+                        setHintTextAppearance(R.style.Base_Widget_MaterialComponents_TextInputLayout_HintText)
                         hint = string(R.string.add_recipe_recipe_hint)
 
                         textInputEditText {
@@ -116,12 +111,14 @@ class AddRecipeLayout(parent: Context) : ViewLayout(parent) {
                         topMargin = dip(26)
                     }
 
-                    inputTime = textInputLayout {
+                    inputTime = themedTextInputLayout(R.style.TextInputLayoutAppearance) {
+                        setHintTextAppearance(R.style.Base_Widget_MaterialComponents_TextInputLayout_HintText)
                         hint = string(R.string.add_recipe_time_hint)
 
                         textInputEditText {
                             typeface = medium
                             padding = dip(16)
+                            inputType = InputType.TYPE_CLASS_NUMBER
                         }
                     }.lparams(width = dip(200)) {
                         topMargin = dip(26)

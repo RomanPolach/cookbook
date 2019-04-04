@@ -10,12 +10,16 @@ import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.willy.ratingbar.ScaleRatingBar
 import cz.ackee.ankoconstraintlayout.constraintLayout
 import cz.ackee.cookbook.R
+import cz.ackee.cookbook.utils.titleTextView
 import cz.ackee.extensions.android.color
+import cz.ackee.extensions.android.drawableLeft
 import cz.ackee.extensions.anko.layout.ViewLayout
 import org.jetbrains.anko.*
+import org.jetbrains.anko.custom.customView
 import org.jetbrains.anko.design.appBarLayout
 import org.jetbrains.anko.design.collapsingToolbarLayout
 import org.jetbrains.anko.design.coordinatorLayout
+import org.jetbrains.anko.support.v4.nestedScrollView
 
 /**
  * Layout for RecipeDetailFragment
@@ -23,6 +27,14 @@ import org.jetbrains.anko.design.coordinatorLayout
 class RecipeDetailLayout(context: Context) : ViewLayout(context) {
 
     lateinit var txtRecipeTitle: TextView
+
+    lateinit var scoreRatingBar: ScaleRatingBar
+
+    lateinit var txtTime: TextView
+
+    lateinit var txtRecipeDescription: TextView
+
+    lateinit var txtRecipeIntro: TextView
 
     override fun createView(ui: AnkoContext<Context>): View {
         return with(ui) {
@@ -35,39 +47,114 @@ class RecipeDetailLayout(context: Context) : ViewLayout(context) {
                         fitsSystemWindows = true
                         setContentScrimColor(color(R.color.primary))
 
+//                        toolbar().lparams {
+//                            collapseMode = CollapsingToolbarLayout.LayoutParams.COLLAPSE_MODE_PIN
+//                            parallaxMultiplier = 0.7f
+//                        }
+
                         constraintLayout {
                             fitsSystemWindows = true
-                        }.lparams(matchParent, wrapContent) {
-                            collapseMode = CollapsingToolbarLayout.LayoutParams.COLLAPSE_MODE_PARALLAX
-                            parallaxMultiplier = 0.7f
 
-                            imageView(R.drawable.img_logo_big) {
+                            val imgLogo = imageView(R.drawable.img_logo_big) {
                                 scaleType = ImageView.ScaleType.FIT_XY
                             }.lparams(matchParent, wrapContent)
 
-                            view {
+                            val viewShadow = view {
                                 alpha = 0.4f
                                 backgroundColor = color(R.color.hockeyapp_text_black)
                             }.lparams(matchParent, dip(0))
 
-                            view {
+                            val viewPink = view {
                                 backgroundColor = color(R.color.button_pink)
                             }.lparams(matchParent, dip(62))
 
                             txtRecipeTitle = textView {
-                                marginStart = dip(30)
-                                bottomMargin = dip(30)
                                 textColor = color(R.color.hockeyapp_text_white)
                                 textSize = 24f
                             }.lparams(dip(200), wrapContent)
 
-                            ScaleRatingBar
-                        }
+                            scoreRatingBar = customView {
+                                setIsIndicator(true)
+                                setNumStars(5)
+                                starPadding = dip(3)
+                                stepSize = 0.5f
+                                leftPadding = dip(20)
+                                setEmptyDrawableRes(R.drawable.ic_star_white)
+                                setFilledDrawableRes(R.drawable.ic_star)
+                            }
 
+                            txtTime = textView {
+                                rightPadding = dip(20)
+                                drawableLeft = R.drawable.ic_time
+                                compoundDrawablePadding = dip(10)
+                            }
+
+                            constraints {
+                                imgLogo.connect(
+                                    TOPS of parentId,
+                                    LEFTS of parentId
+                                )
+
+                                viewShadow.connect(
+                                    TOPS of parentId,
+                                    BOTTOMS of imgLogo
+                                )
+
+                                viewPink.connect(
+                                    BOTTOMS of imgLogo,
+                                    LEFTS of parentId
+                                )
+
+                                txtTime.connect(
+                                    BOTTOM to BOTTOM of viewPink,
+                                    TOP to TOP of viewPink,
+                                    RIGHTS of parentId
+                                )
+
+                                scoreRatingBar.connect(
+                                    BOTTOM to BOTTOM of viewPink,
+                                    TOP to TOP of viewPink,
+                                    LEFTS of parentId
+                                )
+                            }
+                        }.lparams(matchParent, wrapContent) {
+                            collapseMode = CollapsingToolbarLayout.LayoutParams.COLLAPSE_MODE_PARALLAX
+                            parallaxMultiplier = 0.7f
+                        }
                     }.lparams(matchParent, matchParent) {
-                        scrollFlags = AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED
+                        scrollFlags = AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL or AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED
                     }
                 }.lparams(width = matchParent, height = wrapContent)
+
+                nestedScrollView {
+                    isFillViewport = true
+
+                    verticalLayout {
+                        txtRecipeIntro = textView {
+                            verticalPadding = dip(20)
+                            horizontalPadding = dip(20)
+                        }
+
+                        titleTextView(R.string.add_recipe_ingredients_title) {
+                            verticalPadding = dip(20)
+                            horizontalPadding = dip(20)
+                        }
+
+                        titleTextView(R.string.recipe_detail_food_preparation_title) {
+                            verticalPadding = dip(20)
+                            horizontalPadding = dip(20)
+                        }
+
+                        txtRecipeDescription = textView {
+                            verticalPadding = dip(20)
+                            horizontalPadding = dip(20)
+                        }
+
+                    }.lparams(matchParent, wrapContent)
+
+                }.lparams(matchParent, matchParent) {
+                    behavior = AppBarLayout.ScrollingViewBehavior()
+                }
             }
         }
     }

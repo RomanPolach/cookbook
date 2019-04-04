@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyAttribute
-import com.willy.ratingbar.ScaleRatingBar
 import cz.ackee.ankoconstraintlayout.constraintLayout
 import cz.ackee.cookbook.R
 import cz.ackee.cookbook.utils.titleTextView

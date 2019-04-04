@@ -1,9 +1,8 @@
 package cz.ackee.cookbook.model.repository
 
 import cz.ackee.cookbook.model.api.Recipe
-import cz.ackee.cookbook.model.api.exception.ExceptionMapperHelper
+import cz.ackee.cookbook.model.api.exception.resolveException
 import cz.ackee.cookbook.model.interactor.ApiInteractor
-import kotlinx.coroutines.Deferred
 
 /**
  * Sample repository
@@ -13,12 +12,16 @@ interface RecipeRepository {
     /**
      * Fetch fresh recipe data from API
      */
-    suspend fun fetchRecipeList(): Deferred<List<Recipe>>
+    suspend fun getRecipeList(): List<Recipe>
 }
 
-class RecipeRepositoryImpl(val apiInteractor: ApiInteractor) : RecipeRepository, ExceptionMapperHelper {
+class RecipeRepositoryImpl(val apiInteractor: ApiInteractor) : RecipeRepository {
 
-    suspend override fun fetchRecipeList(): Deferred<List<Recipe>> {
-        return apiInteractor.getSampleData()
+    suspend override fun getRecipeList(): List<Recipe> {
+        return try {
+            apiInteractor.getSampleData()
+        } catch (e: Exception) {
+            throw resolveException(e)
+        }
     }
 }

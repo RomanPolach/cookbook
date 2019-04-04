@@ -7,4 +7,6 @@
     <string name="add_recipe_your_ingredients_hint">Vaše ingredience</string>
     <string name="add_recipe_button_add_title">Přidat</string>
     <string name="add_recipe_input_intro_text">Úvodní text</string>
+    <string name="add_recipe_recipe_hint">Návod</string>
+    <string name="add_recipe_time_hint">Čas</string>
 </resources>

@@ -39,12 +39,18 @@ class AddRecipeLayout(parent: Context) : ViewLayout(parent) {
 
     lateinit var buttonAdd: Button
 
+    lateinit var inputRecipe: TextInputLayout
+
+    lateinit var inputTime: TextInputLayout
+
     override fun createView(ui: AnkoContext<Context>): View {
         return with(ui) {
             nestedScrollView {
                 verticalLayout {
                     layoutParams = ViewGroup.LayoutParams(org.jetbrains.anko.matchParent, org.jetbrains.anko.matchParent)
                     id = R.id.constraint_layout
+                    verticalPadding = dip(15)
+                    horizontalPadding = dip(15)
 
                     inputRecipeName = textInputLayout {
                         hint = string(R.string.add_recipe_input_recipe_name)
@@ -55,7 +61,6 @@ class AddRecipeLayout(parent: Context) : ViewLayout(parent) {
                         }
                     }.lparams(width = org.jetbrains.anko.matchParent) {
                         topMargin = dip(26)
-                        bottomMargin = dip(26)
                     }
 
                     inputIntroText = textInputLayout {
@@ -74,7 +79,6 @@ class AddRecipeLayout(parent: Context) : ViewLayout(parent) {
                         text = string(R.string.add_recipe_ingredients_title)
                     }.lparams() {
                         topMargin = dip(10)
-                        bottomMargin = dip(10)
                     }
 
                     recyclerViewIngredients = epoxyRecyclerView {
@@ -89,7 +93,6 @@ class AddRecipeLayout(parent: Context) : ViewLayout(parent) {
                         }
                     }.lparams(width = org.jetbrains.anko.matchParent) {
                         topMargin = dip(26)
-                        bottomMargin = dip(26)
                     }
 
                     buttonAdd = button {
@@ -98,7 +101,30 @@ class AddRecipeLayout(parent: Context) : ViewLayout(parent) {
                         background = drawable(R.drawable.rounded_button_shape)
                         text = string(R.string.add_recipe_button_add_title)
                     }.lparams(width = wrapContent) {
+                        topMargin = dip(20)
                         gravity = Gravity.CENTER
+                    }
+
+                    inputRecipe = textInputLayout {
+                        hint = string(R.string.add_recipe_recipe_hint)
+
+                        textInputEditText {
+                            typeface = medium
+                            padding = dip(16)
+                        }
+                    }.lparams(width = org.jetbrains.anko.matchParent) {
+                        topMargin = dip(26)
+                    }
+
+                    inputTime = textInputLayout {
+                        hint = string(R.string.add_recipe_time_hint)
+
+                        textInputEditText {
+                            typeface = medium
+                            padding = dip(16)
+                        }
+                    }.lparams(width = dip(200)) {
+                        topMargin = dip(26)
                     }
                 }
             }

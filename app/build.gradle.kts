@@ -146,6 +146,10 @@ dependencies {
     // Hockey
     implementation("net.hockeyapp.android:HockeySDK:5.1.1")
 
+    //Moshi
+    kapt("com.squareup.moshi:moshi-kotlin-codegen:1.8.0")
+    implementation("com.squareup.moshi:moshi-adapters:1.8.0")
+
     // Crashlytics
     implementation("com.crashlytics.sdk.android:crashlytics:2.9.9")
 

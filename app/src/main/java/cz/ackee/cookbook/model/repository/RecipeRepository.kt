@@ -7,7 +7,7 @@ import cz.ackee.cookbook.model.api.exception.resolveException
 import cz.ackee.cookbook.model.interactor.ApiInteractor
 
 /**
- * Sample repository
+ * Repository for recipes
  */
 interface RecipeRepository {
 
@@ -20,6 +20,7 @@ interface RecipeRepository {
     // get Recipe detail
     suspend fun getRecipeDetail(recipeId: String): Recipe
 
+    //rate Recipe
     suspend fun rateRecipe(recipeId: String, rating: Float): Recipe
 }
 

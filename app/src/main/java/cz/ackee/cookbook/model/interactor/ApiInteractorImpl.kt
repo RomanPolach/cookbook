@@ -1,6 +1,7 @@
 package cz.ackee.cookbook.model.interactor
 
 import cz.ackee.cookbook.model.api.ApiDescription
+import cz.ackee.cookbook.model.api.NewRecipeRequest
 import cz.ackee.cookbook.model.api.Recipe
 
 /**
@@ -8,5 +9,7 @@ import cz.ackee.cookbook.model.api.Recipe
  */
 class ApiInteractorImpl(private val apiDescription: ApiDescription) : ApiInteractor {
 
-    override suspend fun getSampleData(): List<Recipe> = apiDescription.getRecipes().await()
+    override suspend fun sendRecipe(recipe: NewRecipeRequest): Recipe = apiDescription.sendRecipe(recipe).await()
+
+    override suspend fun getRecipeList(): List<Recipe> = apiDescription.getRecipes().await()
 }

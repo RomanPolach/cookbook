@@ -3,9 +3,14 @@ package cz.ackee.cookbook.utils
 import android.view.ViewManager
 import android.widget.Button
 import android.widget.TextView
+import com.airbnb.epoxy.EpoxyRecyclerView
+import com.google.android.material.textfield.TextInputLayout
 import cz.ackee.cookbook.R
 import cz.ackee.extensions.android.color
 import org.jetbrains.anko.*
+import org.jetbrains.anko.custom.ankoView
+import org.jetbrains.anko.design.textInputEditText
+import org.jetbrains.anko.design.themedTextInputLayout
 
 /**
  * All the styled components used in the whole app
@@ -24,6 +29,10 @@ fun ViewManager.titleTextView(init: (@AnkoViewDslMarker TextView).() -> Unit = {
         setLineSpacing(0f, 1.2f)
         init()
     }
+}
+
+inline fun ViewManager.epoxyRecyclerView(init: (@AnkoViewDslMarker EpoxyRecyclerView).() -> Unit = {}): EpoxyRecyclerView {
+    return ankoView({ context -> EpoxyRecyclerView(context) }, theme = 0) { init() }
 }
 
 fun ViewManager.titleTextView(text: Int, init: (@AnkoViewDslMarker TextView).() -> Unit = {}): TextView {
@@ -119,5 +128,17 @@ fun ViewManager.secondaryButton(text: CharSequence, init: Button.() -> Unit = {}
     return secondaryButton {
         init()
         this.text = text
+    }
+}
+
+fun ViewManager.defaultTextInputLayout(init: (@AnkoViewDslMarker TextInputLayout).() -> Unit = {}): TextInputLayout {
+    return themedTextInputLayout(R.style.TextInputLayoutAppearance) {
+        setHintTextAppearance(R.style.Base_Widget_MaterialComponents_TextInputLayout_HintText)
+
+        textInputEditText {
+            typeface = medium
+            padding = dip(16)
+        }
+        init()
     }
 }

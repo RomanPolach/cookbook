@@ -2,4 +2,15 @@
     <string name="app_name">cookbook</string>
     <string name="main_fragment_tooolbar_title">Recepty</string>
     <string name="main_fragment_minutes">min.</string>
+    <string name="add_recipe_input_recipe_name">Název receptu</string>
+    <string name="add_recipe_ingredients_title">Ingredience</string>
+    <string name="add_recipe_your_ingredients_hint">Vaše ingredience</string>
+    <string name="add_recipe_button_add_title">Přidat</string>
+    <string name="add_recipe_input_intro_text">Úvodní text</string>
+    <string name="add_recipe_recipe_hint">Návod</string>
+    <string name="add_recipe_time_hint">Čas</string>
+    <string name="add_recipe_dialog_fill_all_fields">Vyplňte všechna pole</string>
+    <string name="add_recipe_message_loaded_successfully">Recept byl nahrán úspěšně</string>
+    <string name="add_recipe_toolbar_title">Přidat recept</string>
+    <string name="add_recipe_message_sending">Odesílám...</string>
 </resources>

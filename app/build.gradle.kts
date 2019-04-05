@@ -112,6 +112,12 @@ dependencies {
     implementation("com.airbnb.android:epoxy:3.0.0")
     kapt("com.airbnb.android:epoxy-processor:3.0.0")
 
+    //RecyclerView Divider
+    implementation("com.github.fondesa:recycler-view-divider:2.0.1")
+
+    //Rating Bar
+    implementation("com.github.ome450901:SimpleRatingBar:1.4.3")
+
     // Rx
     implementation("io.reactivex.rxjava2:rxjava:2.2.6")
     implementation("io.reactivex.rxjava2:rxandroid:2.1.0")
@@ -147,6 +153,10 @@ dependencies {
 
     // Hockey
     implementation("net.hockeyapp.android:HockeySDK:5.1.1")
+
+    //Moshi
+    kapt("com.squareup.moshi:moshi-kotlin-codegen:1.8.0")
+    implementation("com.squareup.moshi:moshi-adapters:1.8.0")
 
     // Crashlytics
     implementation("com.crashlytics.sdk.android:crashlytics:2.9.9")

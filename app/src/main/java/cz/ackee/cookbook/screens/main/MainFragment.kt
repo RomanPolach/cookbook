@@ -5,10 +5,13 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import androidx.appcompat.app.ActionBar
+import androidx.appcompat.widget.Toolbar
 import com.fondesa.recyclerviewdivider.RecyclerViewDivider
 import cz.ackee.cookbook.R
 import cz.ackee.cookbook.model.api.Recipe
 import cz.ackee.cookbook.model.repository.State
+import cz.ackee.cookbook.screens.addRecipe.AddRecipeFragment
 import cz.ackee.cookbook.screens.base.fragment.BaseFragment
 import cz.ackee.cookbook.screens.layout.ListLayout
 import cz.ackee.cookbook.screens.main.epoxy.recipe
@@ -18,7 +21,6 @@ import io.reactivex.rxkotlin.plusAssign
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.support.v4.dip
 import org.koin.android.viewmodel.ext.android.viewModel
-import timber.log.Timber
 
 /**
  * Main app fragment with list of Recipes
@@ -88,13 +90,18 @@ class MainFragment : BaseFragment<ListLayout>() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.add_recipe -> Timber.d("TODO")
+            R.id.add_recipe -> fragmentActivity?.replaceFragment(AddRecipeFragment())
         }
         return super.onOptionsItemSelected(item)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_main, menu)
+    }
+
+    override fun onInitActionBar(actionBar: ActionBar?, toolbar: Toolbar?) {
+        super.onInitActionBar(actionBar, toolbar)
+        actionBar?.setDisplayHomeAsUpEnabled(false)
     }
 
     override fun getTitle() = getString(R.string.main_fragment_tooolbar_title)

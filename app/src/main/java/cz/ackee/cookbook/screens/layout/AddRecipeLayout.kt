@@ -36,7 +36,6 @@ class AddRecipeLayout(parent: Context) : ViewLayout(parent) {
                 verticalLayout {
                     id = R.id.linear_layout
                     padding = dip(15)
-                    weightSum = 1f
 
                     inputRecipeName = defaultTextInputLayout {
                         hint = string(R.string.add_recipe_input_recipe_name)
@@ -77,14 +76,21 @@ class AddRecipeLayout(parent: Context) : ViewLayout(parent) {
 
                     inputRecipe = defaultTextInputLayout {
                         hint = string(R.string.add_recipe_recipe_hint)
+                        with(editText!!) {
+
+                        }
                     }.lparams(width = matchParent) {
                         topMargin = dip(26)
                     }
 
-                    inputTime = defaultTextInputLayout {
-                        hint = string(R.string.add_recipe_time_hint)
-                    }.lparams(width = 0, weight = 0.4f) {
-                        topMargin = dip(26)
+                    linearLayout {
+                        inputTime = defaultTextInputLayout {
+                            hint = string(R.string.add_recipe_time_hint)
+                        }.lparams(width = wrapContent, weight = 0.4f) {
+                            topMargin = dip(26)
+                        }
+
+                        space().lparams(width = 0, weight = 0.6f)
                     }
                 }.lparams(matchParent, matchParent)
             }

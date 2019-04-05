@@ -134,11 +134,11 @@ fun ViewManager.secondaryButton(text: CharSequence, init: Button.() -> Unit = {}
 fun ViewManager.defaultTextInputLayout(init: (@AnkoViewDslMarker TextInputLayout).() -> Unit = {}): TextInputLayout {
     return themedTextInputLayout(R.style.TextInputLayoutAppearance) {
         setHintTextAppearance(R.style.Base_Widget_MaterialComponents_TextInputLayout_HintText)
-        init()
 
         textInputEditText {
             typeface = medium
             padding = dip(16)
         }
+        init()
     }
 }

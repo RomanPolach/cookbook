@@ -13,11 +13,12 @@ import cz.ackee.cookbook.model.api.Recipe
 import cz.ackee.cookbook.model.repository.State
 import cz.ackee.cookbook.screens.addRecipe.AddRecipeFragment
 import cz.ackee.cookbook.screens.addRecipe.RecipeDetailFragment
+import cz.ackee.cookbook.screens.base.activity.FragmentActivity
+import cz.ackee.cookbook.screens.base.activity.startFragmentActivity
 import cz.ackee.cookbook.screens.base.fragment.BaseFragment
 import cz.ackee.cookbook.screens.layout.ListLayout
 import cz.ackee.cookbook.screens.main.epoxy.recipe
 import cz.ackee.extensions.android.color
-import cz.ackee.extensions.android.withArguments
 import cz.ackee.extensions.rx.observeOnMainThread
 import io.reactivex.rxkotlin.plusAssign
 import org.jetbrains.anko.design.longSnackbar
@@ -84,7 +85,8 @@ class MainFragment : BaseFragment<ListLayout>() {
                             val bundle = Bundle().apply {
                                 putString(RecipeDetailFragment.RECIPE_ID_KEY, it)
                             }
-                            fragmentActivity?.replaceFragment(RecipeDetailFragment().withArguments(bundle))
+                            startFragmentActivity<FragmentActivity>(RecipeDetailFragment::class.java.name, provideToolbar = false,
+                                fragmentArgs = bundle)
                         }
                         recipeId(it.id)
                         id(it.id)

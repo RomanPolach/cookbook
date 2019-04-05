@@ -8,19 +8,37 @@ import kotlinx.coroutines.launch
 
 class RecipeDetailViewModel(val repository: RecipeRepository) : ScopedViewModel() {
 
-    private val getRecipeDetailStateObserver = StateObserver<Recipe>()
+    private val recipeDetailStateObserver = StateObserver<Recipe>()
+    private val rateRecipeStateObserver = StateObserver<Recipe>()
 
-    fun observeState() = getRecipeDetailStateObserver.observeState()
+    fun observeState() = recipeDetailStateObserver.observeState()
+
+    fun observerRatingState() = rateRecipeStateObserver.observeState()
 
     fun getRecipeDetail(recipeId: String) {
         launch {
-            getRecipeDetailStateObserver.loading()
+            recipeDetailStateObserver.loading()
             try {
-                getRecipeDetailStateObserver.loaded(repository.getRecipeDetail(recipeId))
+                recipeDetailStateObserver.loaded(repository.getRecipeDetail(recipeId))
             } catch (e: Exception) {
-                getRecipeDetailStateObserver.error(e)
+                recipeDetailStateObserver.error(e)
             }
         }
+    }
+
+    fun rateRecipe(recipeId: String, rating: Float) {
+        launch {
+            rateRecipeStateObserver.loading()
+            try {
+                rateRecipeStateObserver.loaded(repository.rateRecipe(recipeId, rating))
+            } catch (e: Exception) {
+                rateRecipeStateObserver.error(e)
+            }
+        }
+    }
+
+    fun onUserRatingClick(recipeId: String, rating: Float) {
+        rateRecipe(recipeId, rating)
     }
 }
 

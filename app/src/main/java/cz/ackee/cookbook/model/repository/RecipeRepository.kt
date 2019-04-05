@@ -1,6 +1,7 @@
 package cz.ackee.cookbook.model.repository
 
 import cz.ackee.cookbook.model.api.NewRecipeRequest
+import cz.ackee.cookbook.model.api.RateReceipeRequest
 import cz.ackee.cookbook.model.api.Recipe
 import cz.ackee.cookbook.model.api.exception.resolveException
 import cz.ackee.cookbook.model.interactor.ApiInteractor
@@ -18,6 +19,8 @@ interface RecipeRepository {
 
     // get Recipe detail
     suspend fun getRecipeDetail(recipeId: String): Recipe
+
+    suspend fun rateRecipe(recipeId: String, rating: Float): Recipe
 }
 
 class RecipeRepositoryImpl(val apiInteractor: ApiInteractor) : RecipeRepository {
@@ -41,6 +44,15 @@ class RecipeRepositoryImpl(val apiInteractor: ApiInteractor) : RecipeRepository 
     suspend override fun getRecipeDetail(recipeId: String): Recipe {
         return try {
             apiInteractor.getRecipeDetailById(recipeId)
+        } catch (e: Exception) {
+            throw resolveException(e)
+        }
+    }
+
+    override suspend fun rateRecipe(recipeId: String, rating: Float): Recipe {
+        val ratingRequest = RateReceipeRequest(rating)
+        return try {
+            apiInteractor.rateReceipeById(recipeId, ratingRequest)
         } catch (e: Exception) {
             throw resolveException(e)
         }

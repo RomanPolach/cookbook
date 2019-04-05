@@ -15,6 +15,8 @@ import cz.ackee.extensions.android.color
 import cz.ackee.extensions.android.drawableLeft
 import cz.ackee.extensions.anko.layout.ViewLayout
 import org.jetbrains.anko.*
+import org.jetbrains.anko.appcompat.v7.navigationIconResource
+import org.jetbrains.anko.appcompat.v7.toolbar
 import org.jetbrains.anko.custom.customView
 import org.jetbrains.anko.design.appBarLayout
 import org.jetbrains.anko.design.collapsingToolbarLayout
@@ -42,12 +44,6 @@ class RecipeDetailLayout(context: Context) : ViewLayout(context) {
 
                     collapsingToolbarLayout {
                         fitsSystemWindows = true
-                        setContentScrimColor(color(R.color.primary))
-
-//                        toolbar().lparams {
-//                            collapseMode = CollapsingToolbarLayout.LayoutParams.COLLAPSE_MODE_PIN
-//                            parallaxMultiplier = 0.7f
-//                        }
 
                         constraintLayout {
                             fitsSystemWindows = true
@@ -125,6 +121,15 @@ class RecipeDetailLayout(context: Context) : ViewLayout(context) {
                             collapseMode = CollapsingToolbarLayout.LayoutParams.COLLAPSE_MODE_PARALLAX
                             parallaxMultiplier = 0.7f
                         }
+
+                        toolbar {
+                            id = R.id.toolbar
+                            navigationIconResource = R.drawable.arrow_left
+                        }.lparams {
+                            collapseMode = CollapsingToolbarLayout.LayoutParams.COLLAPSE_MODE_PIN
+                            parallaxMultiplier = 0.7f
+                        }
+
                     }.lparams(matchParent, matchParent) {
                         scrollFlags = AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL or AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED
                     }
@@ -159,9 +164,6 @@ class RecipeDetailLayout(context: Context) : ViewLayout(context) {
                         }
 
                         scoreBottomRatingBar = customView {
-                            textView(R.string.recipe_detail_rate_this_title).lparams {
-                                bottomMargin = dip(-50)
-                            }
                             setNumStars(5)
                             backgroundColor = color(R.color.title_text)
                             starPadding = dip(3)

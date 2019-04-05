@@ -27,14 +27,11 @@ import org.jetbrains.anko.support.v4.nestedScrollView
 class RecipeDetailLayout(context: Context) : ViewLayout(context) {
 
     lateinit var txtRecipeTitle: TextView
-
     lateinit var scoreRatingBar: ScaleRatingBar
-
     lateinit var txtTime: TextView
-
     lateinit var txtRecipeDescription: TextView
-
     lateinit var txtRecipeIntro: TextView
+    lateinit var scoreBottomRatingBar: ScaleRatingBar
 
     override fun createView(ui: AnkoContext<Context>): View {
         return with(ui) {
@@ -71,6 +68,8 @@ class RecipeDetailLayout(context: Context) : ViewLayout(context) {
                             txtRecipeTitle = textView {
                                 textColor = color(R.color.hockeyapp_text_white)
                                 textSize = 24f
+                                bottomPadding = dip(20)
+                                leftPadding = dip(20)
                             }.lparams(dip(200), wrapContent)
 
                             scoreRatingBar = customView {
@@ -79,8 +78,8 @@ class RecipeDetailLayout(context: Context) : ViewLayout(context) {
                                 starPadding = dip(3)
                                 stepSize = 0.5f
                                 leftPadding = dip(20)
-                                setEmptyDrawableRes(R.drawable.ic_star_white)
-                                setFilledDrawableRes(R.drawable.ic_star)
+                                setEmptyDrawableRes(R.drawable.ic_star)
+                                setFilledDrawableRes(R.drawable.ic_star_white)
                             }
 
                             txtTime = textView {
@@ -98,6 +97,11 @@ class RecipeDetailLayout(context: Context) : ViewLayout(context) {
                                 viewShadow.connect(
                                     TOPS of parentId,
                                     BOTTOMS of imgLogo
+                                )
+
+                                txtRecipeTitle.connect(
+                                    BOTTOM to TOP of viewPink,
+                                    LEFTS of parentId
                                 )
 
                                 viewPink.connect(
@@ -146,6 +150,28 @@ class RecipeDetailLayout(context: Context) : ViewLayout(context) {
                             padding = dip(20)
                         }
 
+//                        val viewBottomRating = view {
+//                            backgroundColor = color(R.color.title_text)
+//                        }.lparams(matchParent, dip(200))
+
+                        val txtRateThisRecipe = textView(R.string.recipe_detail_rate_this_title) {
+                            padding = dip(20)
+                        }
+
+                        scoreBottomRatingBar = customView {
+                            textView(R.string.recipe_detail_rate_this_title).lparams {
+                                bottomMargin = dip(-50)
+                            }
+                            setNumStars(5)
+                            backgroundColor = color(R.color.title_text)
+                            starPadding = dip(3)
+                            stepSize = 0.5f
+                            topPadding = dip(100)
+                            bottomPadding = dip(50)
+                            leftPadding = dip(20)
+                            setEmptyDrawableRes(R.drawable.ic_star_trans_big)
+                            setFilledDrawableRes(R.drawable.ic_star_white_big)
+                        }
                     }.lparams(matchParent, wrapContent)
 
                 }.lparams(matchParent, matchParent) {

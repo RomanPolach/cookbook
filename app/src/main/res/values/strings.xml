@@ -13,4 +13,5 @@
     <string name="add_recipe_message_loaded_successfully">Recept byl nahrán úspěšně</string>
     <string name="add_recipe_toolbar_title">Přidat recept</string>
     <string name="recipe_detail_food_preparation_title">Příprava jídla</string>
+    <string name="recipe_detail_rate_this_title">Ohodnoť tento recept</string>
 </resources>

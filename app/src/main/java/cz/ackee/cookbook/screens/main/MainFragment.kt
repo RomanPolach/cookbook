@@ -12,10 +12,12 @@ import cz.ackee.cookbook.R
 import cz.ackee.cookbook.model.api.Recipe
 import cz.ackee.cookbook.model.repository.State
 import cz.ackee.cookbook.screens.addRecipe.AddRecipeFragment
+import cz.ackee.cookbook.screens.addRecipe.RecipeDetailFragment
 import cz.ackee.cookbook.screens.base.fragment.BaseFragment
 import cz.ackee.cookbook.screens.layout.ListLayout
 import cz.ackee.cookbook.screens.main.epoxy.recipe
 import cz.ackee.extensions.android.color
+import cz.ackee.extensions.android.withArguments
 import cz.ackee.extensions.rx.observeOnMainThread
 import io.reactivex.rxkotlin.plusAssign
 import org.jetbrains.anko.design.longSnackbar
@@ -78,6 +80,13 @@ class MainFragment : BaseFragment<ListLayout>() {
             with(controller) {
                 recipes?.forEach {
                     recipe {
+                        onRecipeClick {
+                            val bundle = Bundle().apply {
+                                putString(RecipeDetailFragment.RECIPE_ID_KEY, it)
+                            }
+                            fragmentActivity?.replaceFragment(RecipeDetailFragment().withArguments(bundle))
+                        }
+                        recipeId(it.id)
                         id(it.id)
                         title(it.name)
                         score(it.score)

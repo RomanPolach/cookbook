@@ -6,7 +6,7 @@ import cz.ackee.cookbook.model.repository.StateObserver
 import cz.ackee.cookbook.screens.base.viewmodel.ScopedViewModel
 import kotlinx.coroutines.launch
 
-class RecipeDetailViewModel(val repository: RecipeRepository, val recipeId: String) : ScopedViewModel() {
+class RecipeDetailViewModel(val repository: RecipeRepository) : ScopedViewModel() {
 
     private val getRecipeDetailStateObserver = StateObserver<Recipe>()
 

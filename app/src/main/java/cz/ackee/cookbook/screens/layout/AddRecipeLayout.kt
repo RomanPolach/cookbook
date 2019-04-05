@@ -4,6 +4,7 @@ import android.content.Context
 import android.text.InputType
 import android.view.View
 import android.widget.Button
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.epoxy.EpoxyRecyclerView
 import com.google.android.material.textfield.TextInputLayout
 import cz.ackee.cookbook.R
@@ -58,6 +59,7 @@ class AddRecipeLayout(parent: Context) : ViewLayout(parent) {
                     }
 
                     recyclerViewIngredients = epoxyRecyclerView {
+                        layoutManager = LinearLayoutManager(ctx)
                     }.lparams(width = matchParent, height = wrapContent)
 
                     inputIngredient = defaultTextInputLayout {
@@ -77,9 +79,6 @@ class AddRecipeLayout(parent: Context) : ViewLayout(parent) {
 
                     inputRecipe = defaultTextInputLayout {
                         hint = string(R.string.add_recipe_recipe_hint)
-                        with(editText!!) {
-
-                        }
                     }.lparams(width = matchParent) {
                         topMargin = dip(26)
                     }

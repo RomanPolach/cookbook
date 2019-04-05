@@ -7,8 +7,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.widget.Toolbar
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import cz.ackee.cookbook.R
 import cz.ackee.cookbook.model.repository.State
 import cz.ackee.cookbook.model.validation.ValidationException
@@ -31,9 +29,9 @@ class AddRecipeFragment : BaseFragment<AddRecipeLayout>() {
     override fun createLayout(parent: Context) = AddRecipeLayout(parent)
 
     override fun AddRecipeLayout.viewCreated(savedState: Bundle?) {
-        layout.btnAdd.onClick {
-            viewModel.onAddIngredient(layout.inputIngredient.editText!!.text.toString())
-            layout.inputIngredient.editText!!.text.clear()
+        btnAdd.onClick {
+            viewModel.onAddIngredient(inputIngredient.editText!!.text.toString())
+            inputIngredient.editText!!.text.clear()
             refreshIngredientsList()
         }
 
@@ -78,7 +76,6 @@ class AddRecipeFragment : BaseFragment<AddRecipeLayout>() {
     }
 
     private fun refreshIngredientsList() {
-        layout.recyclerViewIngredients.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         layout.recyclerViewIngredients.buildModelsWith { controller ->
             with(controller) {
                 viewModel.getIngredients().forEach {

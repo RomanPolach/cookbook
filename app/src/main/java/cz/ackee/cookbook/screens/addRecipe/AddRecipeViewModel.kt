@@ -8,7 +8,7 @@ import cz.ackee.cookbook.screens.base.viewmodel.ScopedViewModel
 import kotlinx.coroutines.launch
 
 /**
- * View model for main screen
+ * View model for AddRecipeFragment
  */
 class AddRecipeViewModel(val repository: RecipeRepository) : ScopedViewModel() {
 

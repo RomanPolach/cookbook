@@ -32,14 +32,13 @@ class RecipeIngredientEpoxyLayout(parent: ViewGroup) : ViewLayout(parent) {
 
     override fun createView(ui: AnkoContext<Context>): View {
         return with(ui) {
-            ingredientText = editText {
+            editText {
                 layoutParams = LayoutParams(matchParent, wrapContent)
                 isEnabled = false
                 isFocusable = false
                 typeface = medium
                 padding = dip(16)
-            }
-            ingredientText
+            }.also { ingredientText = it }
         }
     }
 }

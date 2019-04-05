@@ -5,15 +5,14 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.view.View
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cz.ackee.cookbook.R
-import cz.ackee.cookbook.model.api.NewRecipeRequest
 import cz.ackee.cookbook.model.repository.State
-import cz.ackee.cookbook.screens.addRecipe.epoxy.addRecipe
+import cz.ackee.cookbook.model.validation.ValidationException
+import cz.ackee.cookbook.screens.addRecipe.epoxy.recipeIngredient
 import cz.ackee.cookbook.screens.base.fragment.BaseFragment
 import cz.ackee.cookbook.screens.layout.AddRecipeLayout
 import cz.ackee.extensions.rx.observeOnMainThread
@@ -23,21 +22,17 @@ import org.jetbrains.anko.sdk21.coroutines.onClick
 import org.koin.android.viewmodel.ext.android.viewModel
 
 /**
- * Main app fragment with list of Recipes
+ * Fragment for adding of new recipes
  */
-
 class AddRecipeFragment : BaseFragment<AddRecipeLayout>() {
 
     private val viewModel: AddRecipeViewModel by viewModel()
 
     override fun createLayout(parent: Context) = AddRecipeLayout(parent)
 
-    private val ingredientsList: MutableList<String> = mutableListOf()
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun AddRecipeLayout.viewCreated(savedState: Bundle?) {
         layout.btnAdd.onClick {
-            ingredientsList.add(layout.inputIngredient.editText!!.text.toString())
+            viewModel.onAddIngredient(layout.inputIngredient.editText!!.text.toString())
             layout.inputIngredient.editText!!.text.clear()
             refreshIngredientsList()
         }
@@ -46,12 +41,13 @@ class AddRecipeFragment : BaseFragment<AddRecipeLayout>() {
             .observeOnMainThread()
             .subscribe { state ->
                 when (state) {
+                    is State.Loading -> view.longSnackbar(R.string.add_recipe_message_sending)
                     is State.Loaded -> {
                         view.longSnackbar(R.string.add_recipe_message_loaded_successfully)
                         activity!!.onBackPressed()
                     }
                     is State.Error -> {
-                        view.longSnackbar(state.error.toString())
+                        handleErrors(state.error)
                     }
                 }
             }
@@ -71,12 +67,22 @@ class AddRecipeFragment : BaseFragment<AddRecipeLayout>() {
         inflater.inflate(R.menu.menu_main, menu)
     }
 
-    fun refreshIngredientsList() {
+    fun AddRecipeLayout.handleErrors(error: Throwable) {
+        if (error is ValidationException) {
+            when (error.error) {
+                ValidationException.ValidationErrorType.EMPTY_FIELD -> view.longSnackbar(R.string.add_recipe_dialog_fill_all_fields)
+            }
+        } else {
+            view.longSnackbar(error.toString())
+        }
+    }
+
+    private fun refreshIngredientsList() {
         layout.recyclerViewIngredients.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         layout.recyclerViewIngredients.buildModelsWith { controller ->
             with(controller) {
-                ingredientsList.forEach {
-                    addRecipe {
+                viewModel.getIngredients().forEach {
+                    recipeIngredient {
                         id(it)
                         ingredientTitle(it)
                     }
@@ -92,26 +98,11 @@ class AddRecipeFragment : BaseFragment<AddRecipeLayout>() {
 
     private fun onSendRecipeClick() {
         hideIme()
-        if (validate()) {
-            val recipe = NewRecipeRequest(
-                ingredients = ingredientsList,
-                description = layout.inputRecipe.editText!!.text.toString(),
-                name = "Ackee ${layout.inputRecipeName.editText!!.text}",
-                duration = Integer.parseInt(layout.inputTime.editText!!.text.toString()),
-                info = layout.inputIntroText.editText!!.text.toString()
-            )
-            viewModel.onSendRecipeClick(recipe)
-        } else {
-            view?.longSnackbar(R.string.add_recipe_dialog_fill_all_fields)
-        }
-    }
-
-    private fun validate(): Boolean {
-        return !layout.inputRecipe.editText!!.text.toString().isBlank() &&
-            !layout.inputRecipeName.editText!!.text.toString().isBlank() &&
-            !layout.inputIntroText.editText!!.text.toString().isBlank() &&
-            !ingredientsList.isEmpty() &&
-            !layout.inputTime.editText!!.text.toString().isBlank()
+        viewModel.onSendRecipeClick(
+            layout.inputRecipe.editText!!.text.toString(),
+            layout.inputRecipeName.editText!!.text.toString(),
+            layout.inputIntroText.editText!!.text.toString(),
+            layout.inputTime.editText!!.text.toString())
     }
 
     override fun getTitle() = getString(R.string.add_recipe_toolbar_title)

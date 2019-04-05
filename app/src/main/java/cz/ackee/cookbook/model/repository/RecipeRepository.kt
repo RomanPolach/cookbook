@@ -6,7 +6,7 @@ import cz.ackee.cookbook.model.api.exception.resolveException
 import cz.ackee.cookbook.model.interactor.ApiInteractor
 
 /**
- * Sample repository
+ * Repository for recipes
  */
 interface RecipeRepository {
 
@@ -14,20 +14,29 @@ interface RecipeRepository {
     suspend fun getRecipeList(): List<Recipe>
 
     // send new recipe
-    suspend fun sendRecipe(recipe: NewRecipeRequest): Recipe
+    suspend fun sendRecipe(recipeDescription: String, name: String, intro: String, time: String,
+        ingredientsList: List<String>): Recipe
 }
 
 class RecipeRepositoryImpl(val apiInteractor: ApiInteractor) : RecipeRepository {
 
     suspend override fun getRecipeList(): List<Recipe> {
         return try {
-            apiInteractor.getSampleData()
+            apiInteractor.getRecipeList()
         } catch (e: Exception) {
             throw resolveException(e)
         }
     }
 
-    suspend override fun sendRecipe(recipe: NewRecipeRequest): Recipe {
+    suspend override fun sendRecipe(recipeDescription: String, name: String, intro: String, time: String,
+        ingredientsList: List<String>): Recipe {
+        val recipe = NewRecipeRequest(
+            ingredients = ingredientsList,
+            description = recipeDescription,
+            name = "Ackee $name",
+            duration = Integer.parseInt(time),
+            info = intro
+        )
         return try {
             apiInteractor.sendRecipe(recipe)
         } catch (e: Exception) {

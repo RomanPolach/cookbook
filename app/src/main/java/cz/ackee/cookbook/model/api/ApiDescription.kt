@@ -13,12 +13,6 @@ interface ApiDescription {
     @GET("recipes")
     fun getRecipes(): Deferred<List<Recipe>>
 
-    //   @GET("recipes/{recipeId}")
-    //   fun getRecipeDetailById(@Path("recipeId") recipeId: String): Deferred<Response<Void>>
-
-    // @POST("recipes/{recipeId}/ratings")
-    // fun rateReceipeById(@Path("recipeId") recipeId: String, @Body body: RateReceipeRequest): Deferred<Response<Void>>
-
     @POST("recipes")
     fun sendRecipe(@Body body: NewRecipeRequest): Deferred<Recipe>
 }

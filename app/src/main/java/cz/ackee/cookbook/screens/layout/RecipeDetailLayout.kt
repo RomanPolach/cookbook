@@ -155,10 +155,6 @@ class RecipeDetailLayout(context: Context) : ViewLayout(context) {
                             padding = dip(20)
                         }
 
-//                        val viewBottomRating = view {
-//                            backgroundColor = color(R.color.title_text)
-//                        }.lparams(matchParent, dip(200))
-
                         val txtRateThisRecipe = textView(R.string.recipe_detail_rate_this_title) {
                             padding = dip(20)
                         }

@@ -15,6 +15,9 @@ interface RecipeRepository {
 
     // send new recipe
     suspend fun sendRecipe(recipe: NewRecipeRequest): Recipe
+
+    // get Recipe detail
+    suspend fun getRecipeDetail(recipeId: String): Recipe
 }
 
 class RecipeRepositoryImpl(val apiInteractor: ApiInteractor) : RecipeRepository {
@@ -30,6 +33,14 @@ class RecipeRepositoryImpl(val apiInteractor: ApiInteractor) : RecipeRepository 
     suspend override fun sendRecipe(recipe: NewRecipeRequest): Recipe {
         return try {
             apiInteractor.sendRecipe(recipe)
+        } catch (e: Exception) {
+            throw resolveException(e)
+        }
+    }
+
+    suspend override fun getRecipeDetail(recipeId: String): Recipe {
+        return try {
+            apiInteractor.getRecipeDetailById(recipeId)
         } catch (e: Exception) {
             throw resolveException(e)
         }

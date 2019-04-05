@@ -131,23 +131,19 @@ class RecipeDetailLayout(context: Context) : ViewLayout(context) {
 
                     verticalLayout {
                         txtRecipeIntro = textView {
-                            verticalPadding = dip(20)
-                            horizontalPadding = dip(20)
+                            padding = dip(20)
                         }
 
                         titleTextView(R.string.add_recipe_ingredients_title) {
-                            verticalPadding = dip(20)
-                            horizontalPadding = dip(20)
+                            padding = dip(20)
                         }
 
                         titleTextView(R.string.recipe_detail_food_preparation_title) {
-                            verticalPadding = dip(20)
-                            horizontalPadding = dip(20)
+                            padding = dip(20)
                         }
 
                         txtRecipeDescription = textView {
-                            verticalPadding = dip(20)
-                            horizontalPadding = dip(20)
+                            padding = dip(20)
                         }
 
                     }.lparams(matchParent, wrapContent)

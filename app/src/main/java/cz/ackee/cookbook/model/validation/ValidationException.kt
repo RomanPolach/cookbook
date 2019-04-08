@@ -1,11 +1,11 @@
 package cz.ackee.cookbook.model.validation
 
 /**
- * Alias for a map with validation errors as values
+ * Validation exception, can be passed to State.Error
  */
-typealias ValidationErrorMap = Map<String, ValidationError>
+class ValidationException(val error: ValidationErrorType) : Exception() {
 
-/**
- * Validation exception containing map of validation errors. Can be passed to State.Error
- */
-class ValidationException(val errors: ValidationErrorMap) : Exception()
+    enum class ValidationErrorType {
+        EMPTY_FIELD
+    }
+}

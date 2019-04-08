@@ -9,7 +9,7 @@ import cz.ackee.cookbook.model.api.Recipe
  */
 interface ApiInteractor {
 
-    suspend fun getSampleData(): List<Recipe>
+    suspend fun getRecipeList(): List<Recipe>
 
     suspend fun sendRecipe(recipe: NewRecipeRequest): Recipe
 

@@ -13,7 +13,7 @@ class ApiInteractorImpl(private val apiDescription: ApiDescription) : ApiInterac
 
     override suspend fun sendRecipe(recipe: NewRecipeRequest): Recipe = apiDescription.sendRecipe(recipe).await()
 
-    override suspend fun getSampleData(): List<Recipe> = apiDescription.getRecipes().await()
+    override suspend fun getRecipeList(): List<Recipe> = apiDescription.getRecipes().await()
 
     override suspend fun getRecipeDetailById(recipeId: String): Recipe = apiDescription.getRecipeDetailById(recipeId).await()
 

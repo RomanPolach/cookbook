@@ -1,15 +1,18 @@
 package cz.ackee.cookbook.screens.layout
 
 import android.content.Context
+import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.airbnb.epoxy.EpoxyRecyclerView
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.willy.ratingbar.ScaleRatingBar
 import cz.ackee.ankoconstraintlayout.constraintLayout
 import cz.ackee.cookbook.R
+import cz.ackee.cookbook.utils.epoxyRecyclerView
 import cz.ackee.cookbook.utils.titleTextView
 import cz.ackee.extensions.android.color
 import cz.ackee.extensions.android.drawableLeft
@@ -34,6 +37,7 @@ class RecipeDetailLayout(context: Context) : ViewLayout(context) {
     lateinit var txtRecipeDescription: TextView
     lateinit var txtRecipeIntro: TextView
     lateinit var scoreBottomRatingBar: ScaleRatingBar
+    lateinit var recyclerViewIngredients: EpoxyRecyclerView
 
     override fun createView(ui: AnkoContext<Context>): View {
         return with(ui) {
@@ -79,8 +83,9 @@ class RecipeDetailLayout(context: Context) : ViewLayout(context) {
                             }
 
                             txtTime = textView {
+                                textColor = color(R.color.hockeyapp_text_white)
                                 rightPadding = dip(20)
-                                drawableLeft = R.drawable.ic_time
+                                drawableLeft = R.drawable.ic_time_white
                                 compoundDrawablePadding = dip(10)
                             }
 
@@ -129,7 +134,6 @@ class RecipeDetailLayout(context: Context) : ViewLayout(context) {
                             collapseMode = CollapsingToolbarLayout.LayoutParams.COLLAPSE_MODE_PIN
                             parallaxMultiplier = 0.7f
                         }
-
                     }.lparams(matchParent, matchParent) {
                         scrollFlags = AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL or AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED
                     }
@@ -141,9 +145,14 @@ class RecipeDetailLayout(context: Context) : ViewLayout(context) {
                     verticalLayout {
                         txtRecipeIntro = textView {
                             padding = dip(20)
+                            textSize = 16f
                         }
 
                         titleTextView(R.string.add_recipe_ingredients_title) {
+                            padding = dip(20)
+                        }
+
+                        recyclerViewIngredients = epoxyRecyclerView {
                             padding = dip(20)
                         }
 
@@ -153,25 +162,31 @@ class RecipeDetailLayout(context: Context) : ViewLayout(context) {
 
                         txtRecipeDescription = textView {
                             padding = dip(20)
+                            textSize = 16f
                         }
 
-                        val txtRateThisRecipe = textView(R.string.recipe_detail_rate_this_title) {
-                            padding = dip(20)
-                        }
+                        frameLayout {
+                            scoreBottomRatingBar = customView {
+                                setNumStars(5)
+                                backgroundColor = color(R.color.title_text)
+                                starPadding = dip(3)
+                                stepSize = 0.5f
+                                topPadding = dip(80)
+                                bottomPadding = dip(40)
+                                leftPadding = dip(20)
+                                gravity = Gravity.CENTER_HORIZONTAL
+                                setEmptyDrawableRes(R.drawable.ic_star_trans_big)
+                                setFilledDrawableRes(R.drawable.ic_star_white_big)
+                            }
 
-                        scoreBottomRatingBar = customView {
-                            setNumStars(5)
-                            backgroundColor = color(R.color.title_text)
-                            starPadding = dip(3)
-                            stepSize = 0.5f
-                            topPadding = dip(100)
-                            bottomPadding = dip(50)
-                            leftPadding = dip(20)
-                            setEmptyDrawableRes(R.drawable.ic_star_trans_big)
-                            setFilledDrawableRes(R.drawable.ic_star_white_big)
-                        }
+                            val txtRateThisRecipe = textView(R.string.recipe_detail_rate_this_title) {
+                                padding = dip(20)
+                                textColor = color(R.color.hockeyapp_text_white)
+                                textSize = 20f
+                                gravity = Gravity.CENTER_HORIZONTAL
+                            }
+                        }.lparams(matchParent, wrapContent)
                     }.lparams(matchParent, wrapContent)
-
                 }.lparams(matchParent, matchParent) {
                     behavior = AppBarLayout.ScrollingViewBehavior()
                 }

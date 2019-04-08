@@ -13,6 +13,8 @@ import cz.ackee.cookbook.model.repository.State
 import cz.ackee.cookbook.screens.base.fragment.BaseFragment
 import cz.ackee.cookbook.screens.layout.RecipeDetailLayout
 import cz.ackee.cookbook.screens.recipeDetail.RecipeDetailViewModel
+import cz.ackee.cookbook.screens.recipeDetail.ingredientDetail
+import cz.ackee.cookbook.utils.withModels
 import cz.ackee.extensions.android.visible
 import cz.ackee.extensions.rx.observeOnMainThread
 import io.reactivex.rxkotlin.plusAssign
@@ -76,6 +78,15 @@ class RecipeDetailFragment : BaseFragment<RecipeDetailLayout>() {
             txtRecipeIntro.text = recipe.description
             txtTime.text = "${recipe.duration} ${getString(R.string.main_fragment_minutes)}"
             scoreRatingBar.rating = recipe.score
+
+            recyclerViewIngredients.withModels {
+                recipe.ingredients?.forEach {
+                    ingredientDetail {
+                        id(it)
+                        title(it!!)
+                    }
+                }
+            }
         }
     }
 

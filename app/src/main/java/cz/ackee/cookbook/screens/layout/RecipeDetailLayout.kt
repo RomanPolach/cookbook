@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.airbnb.epoxy.EpoxyRecyclerView
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.CollapsingToolbarLayout
@@ -153,6 +154,7 @@ class RecipeDetailLayout(context: Context) : ViewLayout(context) {
                         }
 
                         recyclerViewIngredients = epoxyRecyclerView {
+                            layoutManager = LinearLayoutManager(ctx)
                             padding = dip(20)
                         }
 
@@ -179,7 +181,7 @@ class RecipeDetailLayout(context: Context) : ViewLayout(context) {
                                 setFilledDrawableRes(R.drawable.ic_star_white_big)
                             }
 
-                            val txtRateThisRecipe = textView(R.string.recipe_detail_rate_this_title) {
+                            textView(R.string.recipe_detail_rate_this_title) {
                                 padding = dip(20)
                                 textColor = color(R.color.hockeyapp_text_white)
                                 textSize = 20f

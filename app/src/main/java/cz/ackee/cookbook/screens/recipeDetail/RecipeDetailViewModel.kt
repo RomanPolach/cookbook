@@ -2,6 +2,7 @@ package cz.ackee.cookbook.screens.recipeDetail
 
 import cz.ackee.cookbook.model.api.Recipe
 import cz.ackee.cookbook.model.repository.RecipeRepository
+import cz.ackee.cookbook.model.repository.State
 import cz.ackee.cookbook.model.repository.StateObserver
 import cz.ackee.cookbook.screens.base.viewmodel.ScopedViewModel
 import kotlinx.coroutines.launch
@@ -38,7 +39,10 @@ class RecipeDetailViewModel(val repository: RecipeRepository) : ScopedViewModel(
     }
 
     fun onUserRatingClick(recipeId: String, rating: Float) {
-        rateRecipe(recipeId, rating)
+        // run request only once
+        if (rateRecipeStateObserver.getCurrentState() !is State.Loading && rateRecipeStateObserver.getCurrentState() !is State.Loaded) {
+            rateRecipe(recipeId, rating)
+        }
     }
 }
 

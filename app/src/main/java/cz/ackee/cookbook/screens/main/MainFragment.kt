@@ -18,6 +18,7 @@ import cz.ackee.cookbook.screens.base.activity.startFragmentActivity
 import cz.ackee.cookbook.screens.base.fragment.BaseFragment
 import cz.ackee.cookbook.screens.layout.ListLayout
 import cz.ackee.cookbook.screens.main.epoxy.recipe
+import cz.ackee.cookbook.utils.withModels
 import cz.ackee.extensions.android.color
 import cz.ackee.extensions.rx.observeOnMainThread
 import io.reactivex.rxkotlin.plusAssign
@@ -77,23 +78,18 @@ class MainFragment : BaseFragment<ListLayout>() {
     }
 
     private fun addRecipes(recipes: List<Recipe>?) {
-        layout.epoxyRecyclerView.buildModelsWith { controller ->
-            with(controller) {
-                recipes?.forEach {
-                    recipe {
-                        onRecipeClick {
-                            val bundle = Bundle().apply {
-                                putString(RecipeDetailFragment.RECIPE_ID_KEY, it)
-                            }
-                            startFragmentActivity<FragmentActivity>(RecipeDetailFragment::class.java.name, provideToolbar = false,
-                                fragmentArgs = bundle)
+        layout.epoxyRecyclerView.withModels {
+            recipes?.forEach {
+                recipe {
+                    onRecipeClick {
+                        val bundle = Bundle().apply {
+                            putString(RecipeDetailFragment.RECIPE_ID_KEY, it)
                         }
-                        recipeId(it.id)
-                        id(it.id)
-                        title(it.name)
-                        score(it.score)
-                        time("${it.duration} ${getString(R.string.main_fragment_minutes)}")
+                        startFragmentActivity<FragmentActivity>(RecipeDetailFragment::class.java.name, provideToolbar = false,
+                            fragmentArgs = bundle)
                     }
+                    id(it.id)
+                    recipeItem(it)
                 }
             }
         }

@@ -10,6 +10,8 @@ import androidx.appcompat.widget.Toolbar
 import cz.ackee.cookbook.R
 import cz.ackee.cookbook.model.api.Recipe
 import cz.ackee.cookbook.model.repository.State
+import cz.ackee.cookbook.screens.base.activity.FragmentActivity
+import cz.ackee.cookbook.screens.base.activity.startFragmentActivity
 import cz.ackee.cookbook.screens.base.fragment.BaseFragment
 import cz.ackee.cookbook.screens.layout.RecipeDetailLayout
 import cz.ackee.cookbook.screens.recipeDetail.RecipeDetailViewModel
@@ -93,6 +95,7 @@ class RecipeDetailFragment : BaseFragment<RecipeDetailLayout>() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.add_recipe -> {
+                startFragmentActivity<FragmentActivity>(AddRecipeFragment::class.java.name, provideToolbar = true)
                 return true
             }
         }

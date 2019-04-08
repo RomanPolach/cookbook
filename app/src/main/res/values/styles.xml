@@ -22,5 +22,6 @@
 
     <style name="TextInputLayoutAppearance" parent="Base.Widget.MaterialComponents.TextInputLayout">
         <item name="colorControlActivated">@color/title_text</item>
+        <item name="android:textColorHint">@color/greyHint</item>
     </style>
 </resources>

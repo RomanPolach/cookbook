@@ -22,6 +22,7 @@ class ToolbarLayout(parent: ViewGroup) : ViewLayout(parent) {
                 backgroundResource = R.color.primary
                 id = R.id.toolbar
                 layoutParams = ViewGroup.LayoutParams(matchParent, ctx.attrDimen(R.attr.actionBarSize))
+                elevation = 10f
             }
         }
     }

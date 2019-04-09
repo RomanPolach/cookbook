@@ -15,5 +15,5 @@ val viewModelModule = module {
 
     viewModel { AddRecipeViewModel(repository = get()) }
 
-    viewModel { RecipeDetailViewModel(repository = get()) }
+    viewModel { RecipeDetailViewModel(repository = get(), recipeDao = get()) }
 }

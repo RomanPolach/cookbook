@@ -20,11 +20,11 @@ class MainViewModel(val repository: RecipeRepository, val recipeDao: RecipeDao) 
     private val recipeListStateObserver = StateObserver<List<Recipe>>()
 
     init {
+        recipeListStateObserver.loading()
         launch {
-            recipeListStateObserver.loading()
-
             disposables += recipeDao.getRecipes()
-                .subscribeOnIO().observeOnMainThread()
+                .subscribeOnIO()
+                .observeOnMainThread()
                 .subscribe {
                     if (it.isNotEmpty()) {
                         recipeListStateObserver.loaded(it)

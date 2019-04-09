@@ -25,7 +25,7 @@ open class RecipeEpoxyModel : EpoxyModelWithLayout<RecipeLayout>() {
     @EpoxyAttribute
     lateinit var recipeItem: Recipe
 
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     lateinit var onRecipeClick: (id: String) -> Unit
 
     override fun createViewLayout(parent: ViewGroup) = RecipeLayout(parent)
@@ -33,7 +33,8 @@ open class RecipeEpoxyModel : EpoxyModelWithLayout<RecipeLayout>() {
     override fun RecipeLayout.bind() {
         txtTitle.text = recipeItem.name
         txtTime.text = "${recipeItem.duration} ${view.context.getString(R.string.main_fragment_minutes)}"
-        scoreRatingBar.rating = recipeItem.score
+        //round to 0.5
+        scoreRatingBar.rating = Math.round(recipeItem.score * 2) / 2.0f
         view.setOnClickListener {
             onRecipeClick(recipeItem.id)
         }

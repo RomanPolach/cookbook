@@ -12,6 +12,7 @@ import cz.ackee.extensions.epoxy.EpoxyModelWithLayout
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.dip
 import org.jetbrains.anko.textView
+import org.jetbrains.anko.verticalPadding
 
 /**
  * EpoxyModel for ingredients list in Recipe Detail
@@ -37,6 +38,7 @@ class IngredientDetailEpoxyLayout(parent: ViewGroup) : ViewLayout(parent) {
             textView {
                 drawableLeft = R.drawable.dot_shape
                 compoundDrawablePadding = dip(20)
+                verticalPadding = dip(20)
             }.also { titleText = it }
         }
     }

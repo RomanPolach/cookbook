@@ -132,6 +132,7 @@ class RecipeDetailLayout(context: Context) : ViewLayout(context) {
                             id = R.id.toolbar
                             navigationIconResource = R.drawable.arrow_left
                         }.lparams {
+                            topMargin = dip(24)
                             collapseMode = CollapsingToolbarLayout.LayoutParams.COLLAPSE_MODE_PIN
                             parallaxMultiplier = 0.7f
                         }
@@ -175,7 +176,6 @@ class RecipeDetailLayout(context: Context) : ViewLayout(context) {
                                 stepSize = 0.5f
                                 topPadding = dip(80)
                                 bottomPadding = dip(40)
-                                leftPadding = dip(20)
                                 gravity = Gravity.CENTER_HORIZONTAL
                                 setEmptyDrawableRes(R.drawable.ic_star_trans_big)
                                 setFilledDrawableRes(R.drawable.ic_star_white_big)

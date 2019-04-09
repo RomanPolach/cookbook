@@ -31,12 +31,21 @@ open class RecipeEpoxyModel : EpoxyModelWithLayout<RecipeLayout>() {
     @EpoxyAttribute
     lateinit var time: String
 
+    @EpoxyAttribute
+    lateinit var recipeId: String
+
+    @EpoxyAttribute
+    lateinit var onRecipeClick: (id: String) -> Unit
+
     override fun createViewLayout(parent: ViewGroup) = RecipeLayout(parent)
 
     override fun RecipeLayout.bind() {
         txtTitle.text = title
         txtTime.text = time
         scoreRatingBar.rating = score
+        view.setOnClickListener {
+            onRecipeClick(recipeId)
+        }
     }
 }
 

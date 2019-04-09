@@ -1,6 +1,7 @@
 package cz.ackee.cookbook.model.interactor
 
 import cz.ackee.cookbook.model.api.NewRecipeRequest
+import cz.ackee.cookbook.model.api.RateReceipeRequest
 import cz.ackee.cookbook.model.api.Recipe
 
 /**
@@ -11,4 +12,8 @@ interface ApiInteractor {
     suspend fun getRecipeList(): List<Recipe>
 
     suspend fun sendRecipe(recipe: NewRecipeRequest): Recipe
+
+    suspend fun getRecipeDetailById(recipeId: String): Recipe
+
+    suspend fun rateReceipeById(recipeId: String, ratingRequest: RateReceipeRequest): Recipe
 }

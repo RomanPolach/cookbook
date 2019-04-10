@@ -24,7 +24,4 @@ interface RecipeDao {
 
     @Query("SELECT * FROM Recipe")
     fun getRecipes(): Flowable<List<Recipe>>
-
-    @Query("UPDATE recipe SET rated=:voted WHERE id = :id")
-    fun setUserVoted(id: String, voted: Boolean)
 }

@@ -31,7 +31,7 @@ class RecipeDetailViewModel(val repository: RecipeRepository, val recipeDao: Rec
                 }
 
             try {
-                var newRecipe = repository.getRecipeDetail(recipeId)
+                val newRecipe = repository.getRecipeDetail(recipeId)
                 withContext(Dispatchers.IO) {
                     recipeDao.insertDetail(newRecipe)
                 }
@@ -47,7 +47,7 @@ class RecipeDetailViewModel(val repository: RecipeRepository, val recipeDao: Rec
             try {
                 rateRecipeStateObserver.loaded(repository.rateRecipe(recipeId, rating))
                 withContext(Dispatchers.IO) {
-                    recipeDao.setUserVoted(recipeId, true)
+                    // TODO save to DB recipeDao.setUserVoted(recipeId, true)
                 }
             } catch (e: Exception) {
                 rateRecipeStateObserver.error(e)

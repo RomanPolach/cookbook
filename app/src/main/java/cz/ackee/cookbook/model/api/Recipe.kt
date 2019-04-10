@@ -14,6 +14,5 @@ data class Recipe(
     val duration: Int,
     val score: Float,
     var description: String?,
-    var ingredients: List<String?>?,
-    var rated: Boolean?
+    var ingredients: List<String?>?
 )

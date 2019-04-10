@@ -46,7 +46,6 @@ class RecipeDetailFragment : BaseFragment<RecipeDetailLayout>() {
         setStatusBar(false)
         scoreBottomRatingBar.setOnRatingChangeListener { ratingBar, rating, fromUser ->
             viewModel.onUserRatingClick(rating)
-            scoreBottomRatingBar.setIsIndicator(true)
         }
 
         disposables += viewModel.observeState()
@@ -67,7 +66,10 @@ class RecipeDetailFragment : BaseFragment<RecipeDetailLayout>() {
             .observeOnMainThread()
             .subscribe { state ->
                 when (state) {
-                    is State.Loading -> view.snackbar(R.string.general_sending)
+                    is State.Loading -> {
+                        scoreBottomRatingBar.setIsIndicator(true)
+                        view.snackbar(R.string.general_sending)
+                    }
                     is State.Loaded -> {
                         view.longSnackbar(R.string.recipe_detail_recipe_rated)
                     }

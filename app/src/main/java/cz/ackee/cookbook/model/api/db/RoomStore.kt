@@ -10,12 +10,10 @@ import cz.ackee.cookbook.model.api.converters.Converters
  * Room DB initialisation
  */
 @Database(
-    entities = [
-        (Recipe::class)
-    ],
-    version = 3, exportSchema = false
+    entities = [Recipe::class],
+    version = 1,
+    exportSchema = false
 )
-
 @TypeConverters(Converters::class)
 abstract class RoomStore : RoomDatabase() {
 

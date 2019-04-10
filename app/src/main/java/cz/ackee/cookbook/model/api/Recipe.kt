@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 /**
- * Sample api entities
+ * Entity for recpies
  */
 @Entity
 data class Recipe(
@@ -14,5 +14,5 @@ data class Recipe(
     val duration: Int,
     val score: Float,
     var description: String?,
-    var ingredients: List<String?>?
+    var ingredients: List<String>?
 )

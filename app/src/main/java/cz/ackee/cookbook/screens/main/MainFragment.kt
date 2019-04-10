@@ -12,8 +12,8 @@ import com.fondesa.recyclerviewdivider.RecyclerViewDivider
 import cz.ackee.cookbook.R
 import cz.ackee.cookbook.model.api.Recipe
 import cz.ackee.cookbook.model.repository.State
-import cz.ackee.cookbook.screens.addRecipe.AddRecipeFragment
-import cz.ackee.cookbook.screens.addRecipe.RecipeDetailFragment
+import cz.ackee.cookbook.screens.addrecipe.AddRecipeFragment
+import cz.ackee.cookbook.screens.addrecipe.RecipeDetailFragment
 import cz.ackee.cookbook.screens.base.activity.FragmentActivity
 import cz.ackee.cookbook.screens.base.activity.startFragmentActivity
 import cz.ackee.cookbook.screens.base.fragment.BaseFragment
@@ -42,11 +42,8 @@ class MainFragment : BaseFragment<ListLayout>() {
                 recipe {
                     id(it.id)
                     onRecipeClick {
-                        val bundle = Bundle().apply {
-                            putString(RecipeDetailFragment.RECIPE_ID_KEY, it)
-                        }
                         startFragmentActivity<FragmentActivity>(RecipeDetailFragment::class.java.name, provideToolbar = false,
-                            fragmentArgs = bundle)
+                            fragmentArgs = RecipeDetailFragment.arguments(it))
                     }
                     recipeItem(it)
                 }
@@ -112,11 +109,6 @@ class MainFragment : BaseFragment<ListLayout>() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_main, menu)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        disposables.clear()
     }
 
     override fun onInitActionBar(actionBar: ActionBar?, toolbar: Toolbar?) {

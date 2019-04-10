@@ -99,6 +99,7 @@ dependencies {
     kapt("androidx.room:room-compiler:2.0.0")
     implementation("cz.ackee:anko-constraint-layout:1.1.2")
     implementation("androidx.constraintlayout:constraintlayout:1.1.3")
+    implementation("androidx.core:core-ktx:1.0.0")
 
     // Firebase
     implementation("com.google.firebase:firebase-core:16.0.7")

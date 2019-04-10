@@ -10,9 +10,6 @@ import io.reactivex.Flowable
 @Dao
 interface RecipeDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(recipe: Recipe): Long
-
     @Update
     fun insertDetail(recipe: Recipe): Int
 

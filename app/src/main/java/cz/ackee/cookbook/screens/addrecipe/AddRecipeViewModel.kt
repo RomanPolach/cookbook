@@ -1,4 +1,4 @@
-package cz.ackee.cookbook.screens.addRecipe
+package cz.ackee.cookbook.screens.addrecipe
 
 import cz.ackee.cookbook.model.api.Recipe
 import cz.ackee.cookbook.model.repository.RecipeRepository

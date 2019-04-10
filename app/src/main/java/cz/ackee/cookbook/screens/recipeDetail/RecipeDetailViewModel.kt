@@ -1,5 +1,6 @@
 package cz.ackee.cookbook.screens.recipeDetail
 
+import cz.ackee.cookbook.model.api.RatedRecipes
 import cz.ackee.cookbook.model.api.Recipe
 import cz.ackee.cookbook.model.api.db.RecipeDao
 import cz.ackee.cookbook.model.repository.RecipeRepository
@@ -15,19 +16,23 @@ import kotlinx.coroutines.withContext
 class RecipeDetailViewModel(val repository: RecipeRepository, val recipeDao: RecipeDao) : ScopedViewModel() {
 
     private val recipeDetailStateObserver = StateObserver<Recipe>()
-    private val rateRecipeStateObserver = StateObserver<Recipe>()
+    private val ratingStateObserver = StateObserver<Recipe>()
+    private val ratingAllowedObserver = StateObserver<Boolean>()
 
     fun observeState() = recipeDetailStateObserver.observeState()
-    fun observerRatingState() = rateRecipeStateObserver.observeState()
+    fun observerRatingState() = ratingStateObserver.observeState()
+    fun observeRatingAllowedState() = ratingAllowedObserver.observeState()
 
     fun getRecipeDetail(recipeId: String) {
         launch {
             recipeDetailStateObserver.loading()
-            recipeDao.getRecipeById(recipeId)
+            recipeDao.getRecipeDetail(recipeId)
                 .subscribeOnIO()
                 .observeOnMainThread()
                 .subscribe {
-                    recipeDetailStateObserver.loaded(it)
+                    recipeDetailStateObserver.loaded(it.recipe)
+                    //if there is a record in database about this recipe voted, disable rating bar
+                    ratingAllowedObserver.loaded(it.rated == null)
                 }
 
             try {
@@ -43,21 +48,23 @@ class RecipeDetailViewModel(val repository: RecipeRepository, val recipeDao: Rec
 
     fun rateRecipe(recipeId: String, rating: Float) {
         launch {
-            rateRecipeStateObserver.loading()
+            ratingStateObserver.loading()
             try {
-                rateRecipeStateObserver.loaded(repository.rateRecipe(recipeId, rating))
+                // wrap do RecipeDetail which saves state of rating, so we can hide rating score bar in voted recipes
+                ratingStateObserver.loaded(repository.rateRecipe(recipeId, rating))
                 withContext(Dispatchers.IO) {
-                    // TODO save to DB recipeDao.setUserVoted(recipeId, true)
+                    recipeDao.insertRecipeVoted(RatedRecipes(recipeId, true))
+                    ratingAllowedObserver.loaded(true)
                 }
             } catch (e: Exception) {
-                rateRecipeStateObserver.error(e)
+                ratingStateObserver.error(e)
             }
         }
     }
 
     fun onUserRatingClick(recipeId: String, rating: Float) {
         // run request only once
-        if (rateRecipeStateObserver.getCurrentState() !is State.Loading && rateRecipeStateObserver.getCurrentState() !is State.Loaded) {
+        if (ratingStateObserver.getCurrentState() !is State.Loading && ratingStateObserver.getCurrentState() !is State.Loaded) {
             rateRecipe(recipeId, rating)
         }
     }

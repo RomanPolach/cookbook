@@ -17,6 +17,7 @@ import cz.ackee.cookbook.screens.recipeDetail.RecipeDetailViewModel
 import cz.ackee.cookbook.screens.recipeDetail.ingredientDetail
 import cz.ackee.cookbook.utils.withModels
 import cz.ackee.extensions.android.color
+import cz.ackee.extensions.android.visible
 import cz.ackee.extensions.rx.observeOnMainThread
 import io.reactivex.rxkotlin.plusAssign
 import org.jetbrains.anko.design.longSnackbar
@@ -67,6 +68,16 @@ class RecipeDetailFragment : BaseFragment<RecipeDetailLayout>() {
                     }
                     is State.Error -> {
                         view.longSnackbar(state.error.toString())
+                    }
+                }
+            }
+
+        disposables += viewModel.observeRatingAllowedState()
+            .observeOnMainThread()
+            .subscribe { state ->
+                if (state is State.Loaded) {
+                    if (!state.data) {
+                        layout.scoreBottomRatingBar.visible = false
                     }
                 }
             }

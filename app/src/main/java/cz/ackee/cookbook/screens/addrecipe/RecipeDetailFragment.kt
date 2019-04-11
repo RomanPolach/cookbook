@@ -77,6 +77,7 @@ class RecipeDetailFragment : BaseFragment<RecipeDetailLayout>() {
                     }
                     is State.Error -> {
                         view.longSnackbar(state.error.toString())
+                        //if request failed, enable rating bar again
                         scoreBottomRatingBar.setIsIndicator(false)
                     }
                 }
@@ -87,7 +88,7 @@ class RecipeDetailFragment : BaseFragment<RecipeDetailLayout>() {
             .subscribe { state ->
                 if (state is State.Loaded) {
                     if (!state.data) {
-                        layout.scoreBottomRatingBar.visible = false
+                        layout.frameLayoutRating.visible = false
                     }
                 }
             }

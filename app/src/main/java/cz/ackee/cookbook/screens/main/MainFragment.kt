@@ -100,6 +100,20 @@ class MainFragment : BaseFragment<ListLayout>() {
                     }
                 }
             }
+
+        disposables += viewModel.observeLoadingState()
+            .observeOnMainThread()
+            .subscribe {
+                if (it is State.Loading) {
+                    showProgress(true)
+                }
+                if (it is State.Loaded) {
+                    showProgress(false)
+                }
+                if (it is State.Error) {
+                    showProgress(false)
+                }
+            }
     }
 
     private fun addRecipes(recipes: List<Recipe>) {

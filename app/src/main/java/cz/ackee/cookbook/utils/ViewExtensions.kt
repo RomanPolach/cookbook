@@ -11,6 +11,7 @@ import org.jetbrains.anko.AnkoContext
 
 /**
  * Extensions for view related classes
+ * David Bilík je hloupej
  */
 
 /**

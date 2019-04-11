@@ -35,15 +35,17 @@ interface RecipeRepository {
     suspend fun fetchRecipeList()
 
     suspend fun fetchRecipeListPaged()
+
+    fun isAtTheEndofList(): Boolean
 }
 
 class RecipeRepositoryImpl(val apiInteractor: ApiInteractor, val recipeDao: RecipeDao) : RecipeRepository {
-    private var endOfRecipesListReached = false
+    var endOfRecipesListReached = false
     private var recipeListOffset = 0
     val RECIPE_LIST_PER_PAGE = 5
 
     suspend override fun getRecipeListObservable(): Flowable<List<Recipe>> {
-        return recipeDao.getRecipes()
+        return recipeDao.getRecipesPaged(RECIPE_LIST_PER_PAGE, recipeListOffset)
     }
 
     suspend override fun fetchRecipeList() {
@@ -74,6 +76,10 @@ class RecipeRepositoryImpl(val apiInteractor: ApiInteractor, val recipeDao: Reci
                 throw resolveException(e)
             }
         }
+    }
+
+    override fun isAtTheEndofList(): Boolean {
+        return endOfRecipesListReached
     }
 
     suspend override fun sendRecipe(recipeDescription: String, name: String, intro: String, time: String,

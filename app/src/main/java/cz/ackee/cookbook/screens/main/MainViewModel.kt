@@ -19,11 +19,6 @@ class MainViewModel(val repository: RecipeRepository) : ScopedViewModel() {
     init {
         recipeListStateObserver.loading()
         launch {
-            try {
-                repository.fetchRecipeListPaged()
-            } catch (e: Exception) {
-                recipeListStateObserver.error(e)
-            }
             disposables += repository.getRecipeListObservable()
                 .subscribeOnIO()
                 .observeOnMainThread()
@@ -32,18 +27,25 @@ class MainViewModel(val repository: RecipeRepository) : ScopedViewModel() {
                 }, {
                     recipeListStateObserver.error(it)
                 })
+            try {
+                repository.fetchRecipeListPaged()
+            } catch (e: Exception) {
+                recipeListStateObserver.error(e)
+            }
         }
     }
 
     fun observeState() = recipeListStateObserver.observeState()
 
     fun onScrolledToEnd() {
-        recipeListStateObserver.loading()
-        launch {
-            try {
-                repository.fetchRecipeListPaged()
-            } catch (e: Exception) {
-                recipeListStateObserver.error(e)
+        if (!repository.isAtTheEndofList()) {
+            recipeListStateObserver.loading()
+            launch {
+                try {
+                    repository.fetchRecipeListPaged()
+                } catch (e: Exception) {
+                    recipeListStateObserver.error(e)
+                }
             }
         }
     }

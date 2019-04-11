@@ -21,4 +21,7 @@ interface RecipeDao {
 
     @Query("SELECT * FROM Recipe")
     fun getRecipes(): Flowable<List<Recipe>>
+
+    @Query("SELECT * FROM Recipe LIMIT :perPage OFFSET :offset")
+    fun getRecipesPaged(perPage: Int, offset: Int): Flowable<List<Recipe>>
 }

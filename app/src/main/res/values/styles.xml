@@ -6,7 +6,7 @@
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primaryDark</item>
         <item name="colorAccent">@color/accent</item>
-        <item name="windowActionBar">false</item>
+        <item name="android:statusBarColor">@color/status_bar_color</item>
         <item name="windowNoTitle">true</item>
     </style>
 
@@ -23,5 +23,6 @@
 
     <style name="TextInputLayoutAppearance" parent="Base.Widget.MaterialComponents.TextInputLayout">
         <item name="colorControlActivated">@color/title_text</item>
+        <item name="android:textColorHint">@color/greyHint</item>
     </style>
 </resources>

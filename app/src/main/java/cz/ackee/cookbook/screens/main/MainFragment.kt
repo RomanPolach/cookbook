@@ -7,15 +7,20 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.widget.Toolbar
+import com.airbnb.epoxy.EpoxyController
 import com.fondesa.recyclerviewdivider.RecyclerViewDivider
 import cz.ackee.cookbook.R
 import cz.ackee.cookbook.model.api.Recipe
 import cz.ackee.cookbook.model.repository.State
-import cz.ackee.cookbook.screens.addRecipe.AddRecipeFragment
+import cz.ackee.cookbook.screens.addrecipe.AddRecipeFragment
+import cz.ackee.cookbook.screens.addrecipe.RecipeDetailFragment
+import cz.ackee.cookbook.screens.base.activity.FragmentActivity
+import cz.ackee.cookbook.screens.base.activity.startFragmentActivity
 import cz.ackee.cookbook.screens.base.fragment.BaseFragment
 import cz.ackee.cookbook.screens.layout.ListLayout
 import cz.ackee.cookbook.screens.main.epoxy.recipe
 import cz.ackee.extensions.android.color
+import cz.ackee.extensions.epoxy.adapterProperty
 import cz.ackee.extensions.rx.observeOnMainThread
 import io.reactivex.rxkotlin.plusAssign
 import org.jetbrains.anko.design.longSnackbar
@@ -29,12 +34,30 @@ class MainFragment : BaseFragment<ListLayout>() {
 
     private val viewModel: MainViewModel by viewModel()
 
-    override fun createLayout(parent: Context) = ListLayout(parent, itemDecoration = RecyclerViewDivider.with(context!!)
-        .asSpace()
-        .color(color(R.color.divider))
-        .size(dip(2))
-        .hideLastDivider()
-        .build())
+    private val recipesController = object : EpoxyController() {
+        var recipes: List<Recipe> by adapterProperty(listOf())
+
+        override fun buildModels() {
+            recipes.forEach {
+                recipe {
+                    id(it.id)
+                    onRecipeClick {
+                        startFragmentActivity<FragmentActivity>(RecipeDetailFragment::class.java.name, provideToolbar = false,
+                            fragmentArgs = RecipeDetailFragment.arguments(it))
+                    }
+                    recipeItem(it)
+                }
+            }
+        }
+    }
+
+    override fun createLayout(parent: Context) =
+        ListLayout(parent, controller = recipesController, itemDecoration = RecyclerViewDivider.with(context!!)
+            .asSpace()
+            .color(color(R.color.divider))
+            .size(dip(2))
+            .hideLastDivider()
+            .build())
 
     override fun ListLayout.viewCreated(savedState: Bundle?) {
         disposables += viewModel.observeState()
@@ -55,7 +78,7 @@ class MainFragment : BaseFragment<ListLayout>() {
                         showProgress(true)
                         showEmpty(false)
                         showError(false)
-                        addRecipes(state.previousData)
+                        addRecipes(state.previousData ?: emptyList())
                     }
                     is State.Loaded -> {
                         showProgress(false)
@@ -67,25 +90,14 @@ class MainFragment : BaseFragment<ListLayout>() {
                         showProgress(false)
                         showEmpty(false)
                         showError(true)
-                        view.longSnackbar(state.error.localizedMessage)
+                        view.longSnackbar(state.error.toString())
                     }
                 }
             }
     }
 
-    private fun addRecipes(recipes: List<Recipe>?) {
-        layout.epoxyRecyclerView.buildModelsWith { controller ->
-            with(controller) {
-                recipes?.forEach {
-                    recipe {
-                        id(it.id)
-                        title(it.name)
-                        score(it.score)
-                        time("${it.duration} ${getString(R.string.main_fragment_minutes)}")
-                    }
-                }
-            }
-        }
+    private fun addRecipes(recipes: List<Recipe>) {
+        recipesController.recipes = recipes
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

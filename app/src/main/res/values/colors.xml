@@ -12,4 +12,6 @@
     <color name="secondary_button_background">@color/accent</color>
     <color name="primary_button_background">@color/primary</color>
     <color name="greyHint">#9E9E9E</color>
+    <color name="status_bar_color">#9E9E9E</color>
+    <color name="semitransparent_status_bar">#70111111</color>
 </resources>

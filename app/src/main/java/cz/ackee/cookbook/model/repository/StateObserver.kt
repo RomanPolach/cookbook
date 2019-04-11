@@ -26,6 +26,8 @@ open class StateObserver<T>(default: State<T> = State.Idle) {
     }
 
     fun observeState(): Observable<State<T>> = stateSubject
+
+    fun getCurrentState(): State<T>? = stateSubject.value
 }
 
 /**

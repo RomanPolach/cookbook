@@ -18,8 +18,10 @@ import cz.ackee.cookbook.screens.recipedetail.RecipeDetailViewModel
 import cz.ackee.cookbook.screens.recipedetail.ingredientDetail
 import cz.ackee.cookbook.utils.withModels
 import cz.ackee.extensions.android.color
+import cz.ackee.extensions.android.visible
 import cz.ackee.extensions.rx.observeOnMainThread
 import io.reactivex.rxkotlin.plusAssign
+
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.design.snackbar
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -75,7 +77,18 @@ class RecipeDetailFragment : BaseFragment<RecipeDetailLayout>() {
                     }
                     is State.Error -> {
                         view.longSnackbar(state.error.toString())
+                        //if request failed, enable rating bar again
                         scoreBottomRatingBar.setIsIndicator(false)
+                    }
+                }
+            }
+
+        disposables += viewModel.observeRatingAllowedState()
+            .observeOnMainThread()
+            .subscribe { state ->
+                if (state is State.Loaded) {
+                    if (!state.data) {
+                        layout.frameLayoutRating.visible = false
                     }
                 }
             }

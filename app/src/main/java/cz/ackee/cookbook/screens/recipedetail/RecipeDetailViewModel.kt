@@ -6,19 +6,24 @@ import cz.ackee.cookbook.model.repository.StateObserver
 import cz.ackee.cookbook.screens.base.viewmodel.ScopedViewModel
 import cz.ackee.extensions.rx.observeOnMainThread
 import cz.ackee.extensions.rx.subscribeOnIO
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class RecipeDetailViewModel(val repository: RecipeRepository, val recipeId: String) : ScopedViewModel() {
 
     private val recipeDetailStateObserver = StateObserver<Recipe>()
-    private val rateRecipeStateObserver = StateObserver<Recipe>()
+    private val ratingStateObserver = StateObserver<Recipe>()
+    private val ratingAllowedObserver = StateObserver<Boolean>()
 
     fun observeState() = recipeDetailStateObserver.observeState()
-    fun observerRatingState() = rateRecipeStateObserver.observeState()
+    fun observerRatingState() = ratingStateObserver.observeState()
+    fun observeRatingAllowedState() = ratingAllowedObserver.observeState()
 
     init {
         launch {
             recipeDetailStateObserver.loading()
+
             try {
                 repository.fetchRecipeDetail(recipeId)
             } catch (e: Exception) {
@@ -29,7 +34,8 @@ class RecipeDetailViewModel(val repository: RecipeRepository, val recipeId: Stri
                 .subscribeOnIO()
                 .observeOnMainThread()
                 .subscribe({
-                    recipeDetailStateObserver.loaded(it)
+                    recipeDetailStateObserver.loaded(it.recipe)
+                    ratingAllowedObserver.loaded(it.rated == null)
                 }, {
                     recipeDetailStateObserver.error(it)
                 })
@@ -38,11 +44,15 @@ class RecipeDetailViewModel(val repository: RecipeRepository, val recipeId: Stri
 
     fun onUserRatingClick(rating: Float) {
         launch {
-            rateRecipeStateObserver.loading()
+            ratingStateObserver.loading()
             try {
-                rateRecipeStateObserver.loaded(repository.rateRecipe(recipeId, rating))
+                // wrap do RecipeDetail which saves state of rating, so we can hide rating score bar in voted recipes
+                ratingStateObserver.loaded(repository.rateRecipe(recipeId, rating))
+                withContext(Dispatchers.IO) {
+                    ratingAllowedObserver.loaded(true)
+                }
             } catch (e: Exception) {
-                rateRecipeStateObserver.error(e)
+                ratingStateObserver.error(e)
             }
         }
     }

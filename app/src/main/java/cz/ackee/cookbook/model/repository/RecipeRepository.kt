@@ -1,8 +1,6 @@
 package cz.ackee.cookbook.model.repository
 
-import cz.ackee.cookbook.model.api.NewRecipeRequest
-import cz.ackee.cookbook.model.api.RateReceipeRequest
-import cz.ackee.cookbook.model.api.Recipe
+import cz.ackee.cookbook.model.api.*
 import cz.ackee.cookbook.model.api.db.RecipeDao
 import cz.ackee.cookbook.model.api.exception.resolveException
 import cz.ackee.cookbook.model.interactor.ApiInteractor
@@ -26,7 +24,7 @@ interface RecipeRepository {
         ingredientsList: List<String>): Recipe
 
     // get observable loading detail of recipe
-    suspend fun getRecipeDetailObservable(recipeId: String): Flowable<Recipe>
+    suspend fun getRecipeDetailObservable(recipeId: String): Flowable<RecipeDetail>
 
     //fetch data from remote repository
     suspend fun fetchRecipeDetail(recipeId: String)
@@ -98,8 +96,8 @@ class RecipeRepositoryImpl(val apiInteractor: ApiInteractor, val recipeDao: Reci
         }
     }
 
-    suspend override fun getRecipeDetailObservable(recipeId: String): Flowable<Recipe> {
-        return recipeDao.getRecipeById(recipeId)
+    suspend override fun getRecipeDetailObservable(recipeId: String): Flowable<RecipeDetail> {
+        return recipeDao.getRecipeDetail(recipeId)
     }
 
     suspend override fun fetchRecipeDetail(recipeId: String) {
@@ -115,8 +113,12 @@ class RecipeRepositoryImpl(val apiInteractor: ApiInteractor, val recipeDao: Reci
 
     override suspend fun rateRecipe(recipeId: String, rating: Float): Recipe {
         val ratingRequest = RateReceipeRequest(rating)
-        return try {
-            apiInteractor.rateReceipeById(recipeId, ratingRequest)
+        try {
+            val response = apiInteractor.rateReceipeById(recipeId, ratingRequest)
+            withContext(Dispatchers.IO) {
+                recipeDao.insertRecipeVoted(RatedRecipes(recipeId, true))
+            }
+            return response
         } catch (e: Exception) {
             throw resolveException(e)
         }

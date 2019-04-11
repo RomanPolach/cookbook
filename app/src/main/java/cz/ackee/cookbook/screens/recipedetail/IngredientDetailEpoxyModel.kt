@@ -1,4 +1,4 @@
-package cz.ackee.cookbook.screens.recipeDetail
+package cz.ackee.cookbook.screens.recipedetail
 
 import android.content.Context
 import android.view.View

@@ -9,6 +9,7 @@ import cz.ackee.extensions.anko.layout.ViewLayout
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.appcompat.v7.themedToolbar
 import org.jetbrains.anko.backgroundResource
+import org.jetbrains.anko.dip
 import org.jetbrains.anko.matchParent
 
 /**
@@ -22,7 +23,7 @@ class ToolbarLayout(parent: ViewGroup) : ViewLayout(parent) {
                 backgroundResource = R.color.primary
                 id = R.id.toolbar
                 layoutParams = ViewGroup.LayoutParams(matchParent, ctx.attrDimen(R.attr.actionBarSize))
-                elevation = 10f
+                elevation = dip(10).toFloat()
             }
         }
     }

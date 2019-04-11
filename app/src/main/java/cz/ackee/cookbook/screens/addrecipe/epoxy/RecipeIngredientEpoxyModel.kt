@@ -1,4 +1,4 @@
-package cz.ackee.cookbook.screens.addRecipe.epoxy
+package cz.ackee.cookbook.screens.addrecipe.epoxy
 
 import android.content.Context
 import android.view.View

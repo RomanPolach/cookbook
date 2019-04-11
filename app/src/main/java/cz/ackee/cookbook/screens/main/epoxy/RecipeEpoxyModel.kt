@@ -34,7 +34,7 @@ open class RecipeEpoxyModel : EpoxyModelWithLayout<RecipeLayout>() {
         txtTitle.text = recipeItem.name
         txtTime.text = "${recipeItem.duration} ${view.context.getString(R.string.main_fragment_minutes)}"
         //round to 0.5
-        scoreRatingBar.rating = Math.round(recipeItem.score * 2) / 2.0f
+        scoreRatingBar.rating = recipeItem.score
         view.setOnClickListener {
             onRecipeClick(recipeItem.id)
         }

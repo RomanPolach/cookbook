@@ -1,4 +1,4 @@
-package cz.ackee.cookbook.screens.layout
+package cz.ackee.cookbook.screens.addrecipe
 
 import android.content.Context
 import android.text.InputType

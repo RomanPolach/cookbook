@@ -20,7 +20,7 @@ class MainViewModel(val repository: RecipeRepository) : ScopedViewModel() {
         recipeListStateObserver.loading()
         launch {
             try {
-                repository.fetchRecipeList()
+                repository.fetchRecipeListPaged()
             } catch (e: Exception) {
                 recipeListStateObserver.error(e)
             }
@@ -36,4 +36,15 @@ class MainViewModel(val repository: RecipeRepository) : ScopedViewModel() {
     }
 
     fun observeState() = recipeListStateObserver.observeState()
+
+    fun onScrolledToEnd() {
+        recipeListStateObserver.loading()
+        launch {
+            try {
+                repository.fetchRecipeListPaged()
+            } catch (e: Exception) {
+                recipeListStateObserver.error(e)
+            }
+        }
+    }
 }

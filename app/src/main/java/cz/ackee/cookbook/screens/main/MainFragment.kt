@@ -57,7 +57,9 @@ class MainFragment : BaseFragment<ListLayout>() {
             .color(color(R.color.divider))
             .size(dip(2))
             .hideLastDivider()
-            .build())
+            .build(), onScrolledToEnd = {
+            viewModel.onScrolledToEnd()
+        })
 
     override fun ListLayout.viewCreated(savedState: Bundle?) {
         disposables += viewModel.observeState()

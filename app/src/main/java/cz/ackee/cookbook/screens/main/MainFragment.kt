@@ -34,10 +34,10 @@ class MainFragment : BaseFragment<ListLayout>() {
     private val viewModel: MainViewModel by viewModel()
 
     private val recipesController = object : EpoxyController() {
-        var recipes: MutableList<Recipe> = mutableListOf()
+        var recipes: List<Recipe> = listOf()
 
         fun addRecipes(recipes: List<Recipe>) {
-            this.recipes.addAll(recipes)
+            this.recipes = recipes
             requestModelBuild()
         }
 
@@ -103,7 +103,11 @@ class MainFragment : BaseFragment<ListLayout>() {
     }
 
     private fun addRecipes(recipes: List<Recipe>) {
-        recipesController.addRecipes(recipes)
+        if (recipes.size > 0) {
+            recipesController.addRecipes(recipes)
+        } else {
+            viewModel.onScrolledToEnd()
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

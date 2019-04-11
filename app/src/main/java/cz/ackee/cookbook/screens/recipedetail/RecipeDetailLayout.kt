@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -40,6 +41,7 @@ class RecipeDetailLayout(context: Context) : ViewLayout(context) {
     lateinit var txtRecipeIntro: TextView
     lateinit var scoreBottomRatingBar: ScaleRatingBar
     lateinit var recyclerViewIngredients: EpoxyRecyclerView
+    lateinit var frameLayoutRating: FrameLayout
 
     override fun createView(ui: AnkoContext<Context>): View {
         return with(ui) {
@@ -169,7 +171,7 @@ class RecipeDetailLayout(context: Context) : ViewLayout(context) {
                             textSize = 16f
                         }
 
-                        frameLayout {
+                        frameLayoutRating = frameLayout {
                             scoreBottomRatingBar = customView {
                                 setNumStars(5)
                                 backgroundColor = color(R.color.title_text)

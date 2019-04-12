@@ -20,7 +20,7 @@ interface RecipeRepository {
     //rate Recipe
     suspend fun rateRecipe(recipeId: String, rating: Float): Recipe
 
-    // send new recipe
+    // send new Recipe
     suspend fun sendRecipe(recipeDescription: String, name: String, intro: String, time: String,
         ingredientsList: List<String>): Recipe
 }

@@ -136,6 +136,7 @@ fun ViewManager.defaultTextInputLayout(init: (@AnkoViewDslMarker TextInputLayout
         setHintTextAppearance(R.style.Base_Widget_MaterialComponents_TextInputLayout_HintText)
 
         textInputEditText {
+            hintTextColor = color(R.color.greyHint)
             typeface = medium
             padding = dip(16)
         }

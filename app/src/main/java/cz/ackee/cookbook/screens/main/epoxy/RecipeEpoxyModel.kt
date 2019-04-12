@@ -8,6 +8,7 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.willy.ratingbar.ScaleRatingBar
 import cz.ackee.ankoconstraintlayout.constraintLayout
 import cz.ackee.cookbook.R
+import cz.ackee.cookbook.model.api.Recipe
 import cz.ackee.cookbook.utils.titleTextView
 import cz.ackee.extensions.android.color
 import cz.ackee.extensions.android.drawableLeft
@@ -22,29 +23,20 @@ import org.jetbrains.anko.custom.customView
 open class RecipeEpoxyModel : EpoxyModelWithLayout<RecipeLayout>() {
 
     @EpoxyAttribute
-    lateinit var title: String
+    lateinit var recipeItem: Recipe
 
-    @JvmField
-    @EpoxyAttribute
-    var score: Float = 0f
-
-    @EpoxyAttribute
-    lateinit var time: String
-
-    @EpoxyAttribute
-    lateinit var recipeId: String
-
-    @EpoxyAttribute
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     lateinit var onRecipeClick: (id: String) -> Unit
 
     override fun createViewLayout(parent: ViewGroup) = RecipeLayout(parent)
 
     override fun RecipeLayout.bind() {
-        txtTitle.text = title
-        txtTime.text = time
-        scoreRatingBar.rating = score
+        txtTitle.text = recipeItem.name
+        txtTime.text = "${recipeItem.duration} ${view.context.getString(R.string.main_fragment_minutes)}"
+        //round to 0.5
+        scoreRatingBar.rating = Math.round(recipeItem.score * 2) / 2.0f
         view.setOnClickListener {
-            onRecipeClick(recipeId)
+            onRecipeClick(recipeItem.id)
         }
     }
 }
@@ -63,14 +55,18 @@ class RecipeLayout(parent: ViewGroup) : ViewLayout(parent) {
                 horizontalPadding = dip(16)
                 verticalPadding = dip(8)
 
-                txtTitle = titleTextView().lparams(width = wrapContent)
+                txtTitle = titleTextView {
+                    topPadding = dip(25)
+                }.lparams(width = wrapContent)
 
-                val imgLogo = imageView(R.drawable.img_logo_small)
+                val imgLogo = imageView(R.drawable.img_logo_small) {
+                    verticalPadding = dip(20)
+                }
 
                 scoreRatingBar = customView {
                     setIsIndicator(true)
                     setNumStars(5)
-                    starPadding = dip(3)
+                    starPadding = dip(0)
                     stepSize = 0.5f
                     setEmptyDrawableRes(R.drawable.ic_star_white)
                     setFilledDrawableRes(R.drawable.ic_star)
@@ -89,19 +85,18 @@ class RecipeLayout(parent: ViewGroup) : ViewLayout(parent) {
                     )
 
                     txtTitle.connect(
-                        TOPS of parentId,
+                        TOPS of imgLogo,
                         START to END of imgLogo with dip(16)
                     )
 
                     scoreRatingBar.connect(
-                        TOP to BOTTOM of txtTitle with dip(10),
+                        TOP to BOTTOM of txtTitle with dip(5),
                         START to END of imgLogo with dip(16)
                     )
 
                     txtTime.connect(
-                        START to END of imgLogo with dip(10),
-                        TOP to BOTTOM of scoreRatingBar with dip(10),
-                        BOTTOM to BOTTOM of imgLogo
+                        START to END of imgLogo with dip(16),
+                        BOTTOM to BOTTOM of imgLogo with dip(25)
                     )
                 }
             }

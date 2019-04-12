@@ -26,9 +26,9 @@ class ProgressLayout(parent: ViewGroup) : ViewLayout(parent) {
         return with(ui) {
             frameLayout {
                 layoutParams = ViewGroup.LayoutParams(matchParent, wrapContent)
+                padding = dip(16)
 
-                progressBar {
-                }
+                progressBar()
             }
         }
     }

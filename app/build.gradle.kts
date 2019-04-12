@@ -25,7 +25,7 @@ android {
         applicationId = appProperties["package_name"] as String
         versionName = appProperties["version_name"] as String
         versionCode = gitCommitsCount
-        testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         addManifestPlaceholders(mapOf(
             "appName" to "Ackee skeleton", // TODO change to actual app name to display for debug and beta builds
@@ -191,6 +191,13 @@ dependencies {
         exclude(module = "support-annotations")
         exclude(group = "com.google.code.findbugs")
     }
+
+    androidTestImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0")
+    androidTestImplementation("androidx.test.espresso:espresso-intents:3.1.1")
+    androidTestImplementation("androidx.test:rules:1.1.1")
+    androidTestImplementation("androidx.test.ext:junit:1.1.0")
+    androidTestImplementation("org.mockito:mockito-android:2.23.4")
+
 }
 
 apply(plugin = "com.google.gms.google-services")

@@ -173,7 +173,6 @@ class InfiniteScrollListener(val func: () -> Unit,
         if (continueLoading) {
             if (visibleItemCount + firstVisibleItem >= totalItemCount) {
                 func()
-                //       continueLoading = false
             }
         }
     }

@@ -29,12 +29,10 @@ interface RecipeRepository {
     //fetch data from remote repository
     suspend fun fetchRecipeDetail(recipeId: String)
 
-    //fetch all recipes from internet
-    suspend fun fetchRecipeList()
-
+    // fetch recipes by pages
     suspend fun fetchRecipeListPaged(perPage: Int, recipeListOffset: Int)
 
-    fun isAtTheEndofList(): Boolean
+    fun isAtTheEndOfList(): Boolean
 }
 
 class RecipeRepositoryImpl(val apiInteractor: ApiInteractor, val recipeDao: RecipeDao) : RecipeRepository {
@@ -42,17 +40,6 @@ class RecipeRepositoryImpl(val apiInteractor: ApiInteractor, val recipeDao: Reci
 
     suspend override fun getRecipeListObservable(): Flowable<List<Recipe>> {
         return recipeDao.getRecipes()
-    }
-
-    suspend override fun fetchRecipeList() {
-        try {
-            val recipes = apiInteractor.getRecipeList()
-            withContext(Dispatchers.IO) {
-                recipeDao.insertAllRecipes(recipes)
-            }
-        } catch (e: Exception) {
-            throw resolveException(e)
-        }
     }
 
     suspend override fun fetchRecipeListPaged(perPage: Int, recipeListOffset: Int) {
@@ -69,7 +56,7 @@ class RecipeRepositoryImpl(val apiInteractor: ApiInteractor, val recipeDao: Reci
         }
     }
 
-    override fun isAtTheEndofList(): Boolean {
+    override fun isAtTheEndOfList(): Boolean {
         return endOfRecipesListReached
     }
 

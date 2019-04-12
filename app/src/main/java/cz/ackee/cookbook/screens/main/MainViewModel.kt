@@ -15,9 +15,7 @@ import kotlinx.coroutines.launch
 class MainViewModel(val repository: RecipeRepository) : ScopedViewModel() {
 
     private val recipeListStateObserver = StateObserver<List<Recipe>>()
-
     private val loadingStateObserver = StateObserver<Unit>()
-
     private var recipeListOffset = 0
     val RECIPE_LIST_PER_PAGE = 5
 
@@ -40,8 +38,8 @@ class MainViewModel(val repository: RecipeRepository) : ScopedViewModel() {
 
     fun observeState() = recipeListStateObserver.observeState()
 
-    fun onScrolledToEnd() {
-        if (!repository.isAtTheEndofList()) {
+    fun fetchMoreRecipes() {
+        if (!repository.isAtTheEndOfList()) {
             loadingStateObserver.loading()
             launch {
                 try {

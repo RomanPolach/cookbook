@@ -62,7 +62,7 @@ class MainFragment : BaseFragment<ListLayout>() {
             .size(dip(2))
             .hideLastDivider()
             .build(), onScrolledToEnd = {
-            viewModel.onScrolledToEnd()
+            viewModel.fetchMoreRecipes()
         })
 
     override fun ListLayout.viewCreated(savedState: Bundle?) {
@@ -120,7 +120,8 @@ class MainFragment : BaseFragment<ListLayout>() {
         if (recipes.size > 0) {
             recipesController.addRecipes(recipes)
         } else {
-            viewModel.onScrolledToEnd()
+            // if there is empty database, trigger loading more items from network
+            viewModel.fetchMoreRecipes()
         }
     }
 

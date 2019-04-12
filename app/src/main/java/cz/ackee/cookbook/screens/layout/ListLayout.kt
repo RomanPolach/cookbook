@@ -1,20 +1,20 @@
 package cz.ackee.cookbook.screens.layout
 
 import android.content.Context
-import androidx.annotation.StringRes
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.Gravity.CENTER
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import androidx.annotation.StringRes
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.EpoxyRecyclerView
+import cz.ackee.cookbook.R
 import cz.ackee.extensions.android.visible
 import cz.ackee.extensions.anko.layout.ViewLayout
 import cz.ackee.extensions.recyclerview.onItemClick
-import cz.ackee.cookbook.R
 import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
 

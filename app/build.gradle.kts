@@ -25,7 +25,7 @@ android {
         applicationId = appProperties["package_name"] as String
         versionName = appProperties["version_name"] as String
         versionCode = gitCommitsCount
-        testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         addManifestPlaceholders(mapOf(
             "appName" to "Ackee skeleton", // TODO change to actual app name to display for debug and beta builds
@@ -99,6 +99,7 @@ dependencies {
     kapt("androidx.room:room-compiler:2.0.0")
     implementation("cz.ackee:anko-constraint-layout:1.1.2")
     implementation("androidx.constraintlayout:constraintlayout:1.1.3")
+    implementation("androidx.core:core-ktx:1.0.0")
 
     // Firebase
     implementation("com.google.firebase:firebase-core:16.0.7")
@@ -190,6 +191,13 @@ dependencies {
         exclude(module = "support-annotations")
         exclude(group = "com.google.code.findbugs")
     }
+
+    androidTestImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0")
+    androidTestImplementation("androidx.test.espresso:espresso-intents:3.1.1")
+    androidTestImplementation("androidx.test:rules:1.1.1")
+    androidTestImplementation("androidx.test.ext:junit:1.1.0")
+    androidTestImplementation("org.mockito:mockito-android:2.23.4")
+
 }
 
 apply(plugin = "com.google.gms.google-services")

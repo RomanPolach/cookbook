@@ -1,9 +1,10 @@
-package cz.ackee.cookbook.screens.layout
+package cz.ackee.cookbook.screens.recipedetail
 
 import android.content.Context
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,6 +18,7 @@ import cz.ackee.cookbook.utils.epoxyRecyclerView
 import cz.ackee.cookbook.utils.titleTextView
 import cz.ackee.extensions.android.color
 import cz.ackee.extensions.android.drawableLeft
+import cz.ackee.extensions.android.statusBarHeight
 import cz.ackee.extensions.anko.layout.ViewLayout
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.navigationIconResource
@@ -39,6 +41,7 @@ class RecipeDetailLayout(context: Context) : ViewLayout(context) {
     lateinit var txtRecipeIntro: TextView
     lateinit var scoreBottomRatingBar: ScaleRatingBar
     lateinit var recyclerViewIngredients: EpoxyRecyclerView
+    lateinit var frameLayoutRating: FrameLayout
 
     override fun createView(ui: AnkoContext<Context>): View {
         return with(ui) {
@@ -112,7 +115,7 @@ class RecipeDetailLayout(context: Context) : ViewLayout(context) {
                                 )
 
                                 txtTime.connect(
-                                    BOTTOM to BOTTOM of viewPink,
+                                    BOTTOMS of viewPink,
                                     TOP to TOP of viewPink,
                                     RIGHTS of parentId
                                 )
@@ -132,7 +135,7 @@ class RecipeDetailLayout(context: Context) : ViewLayout(context) {
                             id = R.id.toolbar
                             navigationIconResource = R.drawable.arrow_left
                         }.lparams {
-                            topMargin = dip(24)
+                            topMargin = context.statusBarHeight()
                             collapseMode = CollapsingToolbarLayout.LayoutParams.COLLAPSE_MODE_PIN
                             parallaxMultiplier = 0.7f
                         }
@@ -168,7 +171,7 @@ class RecipeDetailLayout(context: Context) : ViewLayout(context) {
                             textSize = 16f
                         }
 
-                        frameLayout {
+                        frameLayoutRating = frameLayout {
                             scoreBottomRatingBar = customView {
                                 setNumStars(5)
                                 backgroundColor = color(R.color.title_text)

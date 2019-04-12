@@ -1,4 +1,4 @@
-package cz.ackee.cookbook.screens.addRecipe
+package cz.ackee.cookbook.screens.addrecipe
 
 import android.content.Context
 import android.os.Bundle
@@ -10,9 +10,8 @@ import androidx.appcompat.widget.Toolbar
 import cz.ackee.cookbook.R
 import cz.ackee.cookbook.model.repository.State
 import cz.ackee.cookbook.model.validation.ValidationException
-import cz.ackee.cookbook.screens.addRecipe.epoxy.recipeIngredient
+import cz.ackee.cookbook.screens.addrecipe.epoxy.recipeIngredient
 import cz.ackee.cookbook.screens.base.fragment.BaseFragment
-import cz.ackee.cookbook.screens.layout.AddRecipeLayout
 import cz.ackee.extensions.rx.observeOnMainThread
 import io.reactivex.rxkotlin.plusAssign
 import org.jetbrains.anko.design.longSnackbar
@@ -39,7 +38,7 @@ class AddRecipeFragment : BaseFragment<AddRecipeLayout>() {
             .observeOnMainThread()
             .subscribe { state ->
                 when (state) {
-                    is State.Loading -> view.longSnackbar(R.string.add_recipe_message_sending)
+                    is State.Loading -> view.longSnackbar(R.string.general_sending)
                     is State.Loaded -> {
                         view.longSnackbar(R.string.add_recipe_message_loaded_successfully)
                         activity!!.onBackPressed()

@@ -11,8 +11,8 @@ import org.jetbrains.anko.AnkoContext
 
 /**
  * Extensions for view related classes
+ *
  */
-
 /**
  * Get Anko context from view group
  */

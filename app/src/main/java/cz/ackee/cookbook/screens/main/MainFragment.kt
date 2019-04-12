@@ -12,12 +12,13 @@ import com.fondesa.recyclerviewdivider.RecyclerViewDivider
 import cz.ackee.cookbook.R
 import cz.ackee.cookbook.model.api.Recipe
 import cz.ackee.cookbook.model.repository.State
-import cz.ackee.cookbook.screens.addRecipe.AddRecipeFragment
-import cz.ackee.cookbook.screens.addRecipe.RecipeDetailFragment
+import cz.ackee.cookbook.screens.addrecipe.AddRecipeFragment
+import cz.ackee.cookbook.screens.addrecipe.RecipeDetailFragment
 import cz.ackee.cookbook.screens.base.activity.FragmentActivity
 import cz.ackee.cookbook.screens.base.activity.startFragmentActivity
 import cz.ackee.cookbook.screens.base.fragment.BaseFragment
 import cz.ackee.cookbook.screens.layout.ListLayout
+import cz.ackee.cookbook.screens.main.epoxy.progress
 import cz.ackee.cookbook.screens.main.epoxy.recipe
 import cz.ackee.extensions.android.color
 import cz.ackee.extensions.epoxy.adapterProperty
@@ -35,20 +36,27 @@ class MainFragment : BaseFragment<ListLayout>() {
     private val viewModel: MainViewModel by viewModel()
 
     private val recipesController = object : EpoxyController() {
-        var recipes: List<Recipe> by adapterProperty(listOf())
+        var recipes: List<Recipe> by adapterProperty(emptyList())
+        var isLoading: Boolean = false
+            set(value) {
+                field = value
+                requestModelBuild()
+            }
 
         override fun buildModels() {
             recipes.forEach {
                 recipe {
                     id(it.id)
                     onRecipeClick {
-                        val bundle = Bundle().apply {
-                            putString(RecipeDetailFragment.RECIPE_ID_KEY, it)
-                        }
                         startFragmentActivity<FragmentActivity>(RecipeDetailFragment::class.java.name, provideToolbar = false,
-                            fragmentArgs = bundle)
+                            fragmentArgs = RecipeDetailFragment.arguments(it))
                     }
                     recipeItem(it)
+                }
+            }
+            if (isLoading) {
+                progress {
+                    id("Progress")
                 }
             }
         }
@@ -60,7 +68,9 @@ class MainFragment : BaseFragment<ListLayout>() {
             .color(color(R.color.divider))
             .size(dip(2))
             .hideLastDivider()
-            .build())
+            .build(), onScrolledToEnd = {
+            viewModel.fetchMoreRecipes()
+        })
 
     override fun ListLayout.viewCreated(savedState: Bundle?) {
         disposables += viewModel.observeState()
@@ -97,6 +107,24 @@ class MainFragment : BaseFragment<ListLayout>() {
                     }
                 }
             }
+
+        disposables += viewModel.observeLoadingState()
+            .observeOnMainThread()
+            .subscribe {
+                if (it is State.Loading) {
+                    recipesController.isLoading = true
+                }
+                if (it is State.Loaded) {
+                    recipesController.isLoading = false
+                    //if true, we are at last page, so disable infinite loading
+                    setContinueLoading(!it.data)
+                    showProgress(false)
+                }
+                if (it is State.Error) {
+                    recipesController.isLoading = false
+                    showProgress(false)
+                }
+            }
     }
 
     private fun addRecipes(recipes: List<Recipe>) {
@@ -112,11 +140,6 @@ class MainFragment : BaseFragment<ListLayout>() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_main, menu)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        disposables.clear()
     }
 
     override fun onInitActionBar(actionBar: ActionBar?, toolbar: Toolbar?) {

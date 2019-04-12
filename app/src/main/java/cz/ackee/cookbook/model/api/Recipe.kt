@@ -1,10 +1,11 @@
 package cz.ackee.cookbook.model.api
 
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 /**
- * Sample api entities
+ * Entity for recpies
  */
 @Entity
 data class Recipe(
@@ -14,6 +15,17 @@ data class Recipe(
     val duration: Int,
     val score: Float,
     var description: String?,
-    var ingredients: List<String?>?,
-    var rated: Boolean?
+    var ingredients: List<String>?
 )
+
+data class RecipeDetail(
+    @Embedded val recipe: Recipe,
+    val rated: Boolean?
+)
+
+@Entity(tableName = "rated_recipes")
+data class RatedRecipes(
+    @PrimaryKey
+    val recipeId: String,
+    val rated: Boolean?)
+

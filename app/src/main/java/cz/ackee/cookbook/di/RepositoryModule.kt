@@ -10,5 +10,5 @@ import org.koin.dsl.module.module
  */
 val repositoryModule = module {
 
-    single<RecipeRepository> { RecipeRepositoryImpl(apiInteractor = get()) }
+    single<RecipeRepository> { RecipeRepositoryImpl(get(), get()) }
 }

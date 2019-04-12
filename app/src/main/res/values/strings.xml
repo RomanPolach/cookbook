@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">cookbook</string>
+    <string name="general_sending">Odesílám...</string>
+    <string name="general_loading">Načítám...</string>
     <string name="main_fragment_tooolbar_title">Recepty</string>
     <string name="main_fragment_minutes">min.</string>
     <string name="add_recipe_input_recipe_name">Název receptu</string>
@@ -12,9 +14,7 @@
     <string name="add_recipe_dialog_fill_all_fields">Vyplňte všechna pole</string>
     <string name="add_recipe_message_loaded_successfully">Recept byl nahrán úspěšně</string>
     <string name="add_recipe_toolbar_title">Přidat recept</string>
-    <string name="add_recipe_message_sending">Odesílám...</string>
     <string name="recipe_detail_food_preparation_title">Příprava jídla</string>
     <string name="recipe_detail_rate_this_title">Ohodnoť tento recept</string>
     <string name="recipe_detail_recipe_rated">Vaše hodnocení bylo uloženo</string>
-    <string name="sending">Odesílám...</string>
 </resources>

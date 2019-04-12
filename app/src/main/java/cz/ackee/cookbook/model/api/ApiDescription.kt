@@ -1,10 +1,7 @@
 package cz.ackee.cookbook.model.api
 
 import kotlinx.coroutines.Deferred
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
 
 /**
  * Description of REST Api for Retrofit
@@ -12,7 +9,7 @@ import retrofit2.http.Path
 interface ApiDescription {
 
     @GET("recipes")
-    fun getRecipes(): Deferred<List<Recipe>>
+    fun getRecipesPaged(@Query("limit") perPage: Int, @Query("offset") offset: Int): Deferred<List<Recipe>>
 
     @GET("recipes/{recipeId}")
     fun getRecipeDetailById(@Path("recipeId") recipeId: String): Deferred<Recipe>

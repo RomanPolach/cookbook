@@ -1,7 +1,9 @@
 package cz.ackee.cookbook.model.api.db
 
 import androidx.room.*
+import cz.ackee.cookbook.model.api.RatedRecipes
 import cz.ackee.cookbook.model.api.Recipe
+import cz.ackee.cookbook.model.api.RecipeDetail
 import io.reactivex.Flowable
 
 /**
@@ -9,9 +11,6 @@ import io.reactivex.Flowable
  */
 @Dao
 interface RecipeDao {
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(recipe: Recipe): Long
 
     @Update
     fun insertDetail(recipe: Recipe): Int
@@ -25,6 +24,9 @@ interface RecipeDao {
     @Query("SELECT * FROM Recipe")
     fun getRecipes(): Flowable<List<Recipe>>
 
-    @Query("UPDATE recipe SET rated=:voted WHERE id = :id")
-    fun setUserVoted(id: String, voted: Boolean)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insertRecipeVoted(recipe: RatedRecipes)
+
+    @Query("SELECT * from RECIPE LEFT OUTER JOIN rated_recipes on (recipe.id = rated_recipes.recipeId) where recipe.id =:id")
+    fun getRecipeDetail(id: String): Flowable<RecipeDetail>
 }

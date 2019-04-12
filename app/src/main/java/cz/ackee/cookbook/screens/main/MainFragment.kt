@@ -20,6 +20,7 @@ import cz.ackee.cookbook.screens.base.fragment.BaseFragment
 import cz.ackee.cookbook.screens.layout.ListLayout
 import cz.ackee.cookbook.screens.main.epoxy.recipe
 import cz.ackee.extensions.android.color
+import cz.ackee.extensions.epoxy.adapterProperty
 import cz.ackee.extensions.rx.observeOnMainThread
 import io.reactivex.rxkotlin.plusAssign
 import org.jetbrains.anko.design.longSnackbar
@@ -34,12 +35,7 @@ class MainFragment : BaseFragment<ListLayout>() {
     private val viewModel: MainViewModel by viewModel()
 
     private val recipesController = object : EpoxyController() {
-        var recipes: List<Recipe> = listOf()
-
-        fun addRecipes(recipes: List<Recipe>) {
-            this.recipes = recipes
-            requestModelBuild()
-        }
+        var recipes: List<Recipe> by adapterProperty(emptyList())
 
         override fun buildModels() {
             recipes.forEach {
@@ -117,8 +113,8 @@ class MainFragment : BaseFragment<ListLayout>() {
     }
 
     private fun addRecipes(recipes: List<Recipe>) {
-        if (recipes.size > 0) {
-            recipesController.addRecipes(recipes)
+        if (recipes.isNotEmpty()) {
+            recipesController.recipes = recipes
         } else {
             // if there is empty database, trigger loading more items from network
             viewModel.fetchMoreRecipes()

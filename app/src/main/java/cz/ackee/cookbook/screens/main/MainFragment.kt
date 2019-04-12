@@ -18,6 +18,7 @@ import cz.ackee.cookbook.screens.base.activity.FragmentActivity
 import cz.ackee.cookbook.screens.base.activity.startFragmentActivity
 import cz.ackee.cookbook.screens.base.fragment.BaseFragment
 import cz.ackee.cookbook.screens.layout.ListLayout
+import cz.ackee.cookbook.screens.main.epoxy.progress
 import cz.ackee.cookbook.screens.main.epoxy.recipe
 import cz.ackee.extensions.android.color
 import cz.ackee.extensions.epoxy.adapterProperty
@@ -36,6 +37,11 @@ class MainFragment : BaseFragment<ListLayout>() {
 
     private val recipesController = object : EpoxyController() {
         var recipes: List<Recipe> by adapterProperty(emptyList())
+        var isLoading: Boolean = false
+            set(value) {
+                field = value
+                requestModelBuild()
+            }
 
         override fun buildModels() {
             recipes.forEach {
@@ -46,6 +52,11 @@ class MainFragment : BaseFragment<ListLayout>() {
                             fragmentArgs = RecipeDetailFragment.arguments(it))
                     }
                     recipeItem(it)
+                }
+            }
+            if (isLoading) {
+                progress {
+                    id("Progress")
                 }
             }
         }
@@ -101,24 +112,23 @@ class MainFragment : BaseFragment<ListLayout>() {
             .observeOnMainThread()
             .subscribe {
                 if (it is State.Loading) {
-                    showProgress(true)
+                    recipesController.isLoading = true
                 }
                 if (it is State.Loaded) {
+                    recipesController.isLoading = false
+                    //if true, we are at last page, so disable infinite loading
+                    setContinueLoading(!it.data)
                     showProgress(false)
                 }
                 if (it is State.Error) {
+                    recipesController.isLoading = false
                     showProgress(false)
                 }
             }
     }
 
     private fun addRecipes(recipes: List<Recipe>) {
-        if (recipes.isNotEmpty()) {
-            recipesController.recipes = recipes
-        } else {
-            // if there is empty database, trigger loading more items from network
-            viewModel.fetchMoreRecipes()
-        }
+        recipesController.recipes = recipes
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

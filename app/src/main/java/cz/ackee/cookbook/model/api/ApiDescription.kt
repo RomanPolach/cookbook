@@ -9,9 +9,6 @@ import retrofit2.http.*
 interface ApiDescription {
 
     @GET("recipes")
-    fun getRecipes(): Deferred<List<Recipe>>
-
-    @GET("recipes")
     fun getRecipesPaged(@Query("limit") perPage: Int, @Query("offset") offset: Int): Deferred<List<Recipe>>
 
     @GET("recipes/{recipeId}")

@@ -29,7 +29,4 @@ interface RecipeDao {
 
     @Query("SELECT * from RECIPE LEFT OUTER JOIN rated_recipes on (recipe.id = rated_recipes.recipeId) where recipe.id =:id")
     fun getRecipeDetail(id: String): Flowable<RecipeDetail>
-
-    @Query("SELECT * FROM Recipe LIMIT :perPage OFFSET :offset")
-    fun getRecipesPaged(perPage: Int, offset: Int): Flowable<List<Recipe>>
 }

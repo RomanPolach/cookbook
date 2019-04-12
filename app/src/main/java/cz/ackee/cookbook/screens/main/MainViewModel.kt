@@ -15,9 +15,9 @@ import kotlinx.coroutines.launch
 class MainViewModel(val repository: RecipeRepository) : ScopedViewModel() {
 
     private val recipeListStateObserver = StateObserver<List<Recipe>>()
-    private val loadingStateObserver = StateObserver<Unit>()
+    // boolean value true indicates, it is last page
+    private val loadingStateObserver = StateObserver<Boolean>()
     private var recipeListOffset = 0
-    val RECIPE_LIST_PER_PAGE = 5
 
     init {
         recipeListStateObserver.loading()
@@ -26,8 +26,12 @@ class MainViewModel(val repository: RecipeRepository) : ScopedViewModel() {
                 .subscribeOnIO()
                 .observeOnMainThread()
                 .subscribe({
-                    recipeListOffset = it.size
-                    recipeListStateObserver.loaded(it)
+                    if (it.isEmpty()) {
+                        fetchMoreRecipes()
+                    } else {
+                        recipeListOffset = it.size
+                        recipeListStateObserver.loaded(it)
+                    }
                 }, {
                     recipeListStateObserver.error(it)
                 })
@@ -39,16 +43,14 @@ class MainViewModel(val repository: RecipeRepository) : ScopedViewModel() {
     fun observeState() = recipeListStateObserver.observeState()
 
     fun fetchMoreRecipes() {
-        if (!repository.isAtTheEndOfList()) {
-            loadingStateObserver.loading()
-            launch {
-                try {
-                    repository.fetchRecipeListPaged(RECIPE_LIST_PER_PAGE, recipeListOffset)
-                    loadingStateObserver.loaded(Unit)
-                } catch (e: Exception) {
-                    recipeListStateObserver.error(e)
-                    loadingStateObserver.loaded(Unit)
-                }
+        loadingStateObserver.loading()
+        launch {
+            try {
+                repository.fetchRecipeListPaged(recipeListOffset)
+                loadingStateObserver.loaded(repository.isAtTheEndOfList())
+            } catch (e: Exception) {
+                recipeListStateObserver.error(e)
+                loadingStateObserver.loaded(repository.isAtTheEndOfList())
             }
         }
     }

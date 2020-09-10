@@ -44,11 +44,6 @@ class MainFragment : BaseFragment<ListLayout>() {
 
     private val recipesController = object : EpoxyController() {
         var recipes: List<Recipe> by adapterProperty(emptyList())
-        var isLoading: Boolean = false
-            set(value) {
-                field = value
-                requestModelBuild()
-            }
 
         override fun buildModels() {
             recipes.forEach {
@@ -59,11 +54,6 @@ class MainFragment : BaseFragment<ListLayout>() {
                             fragmentArgs = RecipeDetailFragment.arguments(it))
                     }
                     recipeItem(it)
-                }
-            }
-            if (isLoading) {
-                progress {
-                    id("Progress")
                 }
             }
         }
@@ -93,10 +83,6 @@ class MainFragment : BaseFragment<ListLayout>() {
                 }
                 is State.Loading -> {
                     showProgress(true)
-                    showEmptyLayout(false)
-                }
-                is State.Reloading -> {
-                    addRecipes(state.previousData ?: emptyList())
                     showEmptyLayout(false)
                 }
                 is State.Loaded -> {

@@ -68,11 +68,11 @@ class RecipeRepositoryImpl(val apiInteractor: ApiInteractor, val recipeDao: Reci
         }
     }
 
-    suspend override fun getRecipeDetailObservable(recipeId: String): Flowable<RecipeDetail> {
+    override suspend fun getRecipeDetailObservable(recipeId: String): Flowable<RecipeDetail> {
         return recipeDao.getRecipeDetail(recipeId)
     }
 
-    suspend override fun fetchRecipeDetail(recipeId: String) {
+    override suspend fun fetchRecipeDetail(recipeId: String) {
         try {
             val newRecipe = apiInteractor.getRecipeDetailById(recipeId)
             withContext(Dispatchers.IO) {

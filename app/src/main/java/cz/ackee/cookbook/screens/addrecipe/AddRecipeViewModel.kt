@@ -15,10 +15,10 @@ import kotlinx.coroutines.launch
  */
 class AddRecipeViewModel(val repository: RecipeRepository) : ScopedViewModel() {
 
-    private val ingredientsList: MutableList<String> = mutableListOf()
+    val ingredientsList: MutableList<String> = mutableListOf()
     private val addRecipeStateObserver = MutableLiveData<State<Recipe>>()
 
-    fun observeState(): LiveData<State<Recipe>> = addRecipeStateObserver
+    fun recipeState(): LiveData<State<Recipe>> = addRecipeStateObserver
 
     fun onSendRecipeClick(recipe: String, name: String, intro: String, time: String) {
         val validationError = validate(recipe, name, intro, time)
@@ -39,8 +39,6 @@ class AddRecipeViewModel(val repository: RecipeRepository) : ScopedViewModel() {
     fun onAddIngredient(ingredient: String) {
         ingredientsList.add(ingredient)
     }
-
-    fun getIngredients() = ingredientsList
 
     private fun validate(recipe: String, name: String, intro: String, time: String): ValidationException? {
         return if (!recipe.isBlank() &&

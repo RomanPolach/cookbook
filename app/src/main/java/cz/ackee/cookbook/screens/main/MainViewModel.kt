@@ -37,7 +37,7 @@ class MainViewModel(val repository: RecipeRepository) : ScopedViewModel() {
 
     fun observeState(): LiveData<State<List<Recipe>>> = recipeListStateObserver
 
-    fun fetchRecipes() {
+    private fun fetchRecipes() {
         launch {
             try {
                 repository.fetchRecipeList()

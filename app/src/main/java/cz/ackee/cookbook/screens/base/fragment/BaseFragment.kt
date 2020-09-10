@@ -52,20 +52,6 @@ abstract class BaseFragment<T : ViewLayout> : Fragment() {
         }
     }
 
-    abstract fun createLayout(parent: Context): T
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
-        return createLayout(container!!.context).also { layout = it }.view
-    }
-
-    open fun T.viewCreated(savedState: Bundle?) = Unit
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        layout.viewCreated(savedInstanceState)
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setHasOptionsMenu(true)

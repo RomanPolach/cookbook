@@ -1,12 +1,18 @@
 package cz.ackee.cookbook.screens.main
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
 import com.airbnb.epoxy.EpoxyController
 import com.fondesa.recyclerviewdivider.RecyclerViewDivider
 import cz.ackee.cookbook.R
@@ -24,6 +30,7 @@ import cz.ackee.extensions.android.color
 import cz.ackee.extensions.epoxy.adapterProperty
 import cz.ackee.extensions.rx.observeOnMainThread
 import io.reactivex.rxkotlin.plusAssign
+import kotlinx.android.synthetic.main.main_layout.*
 import org.jetbrains.anko.design.longSnackbar
 import org.jetbrains.anko.support.v4.dip
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -62,73 +69,60 @@ class MainFragment : BaseFragment<ListLayout>() {
         }
     }
 
-    override fun createLayout(parent: Context) =
-        ListLayout(parent, controller = recipesController, itemDecoration = RecyclerViewDivider.with(context!!)
-            .asSpace()
-            .color(color(R.color.divider))
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.main_layout, container, false)
+    }
+
+    fun addEpoxyDivider() {
+        epoxyRecyclerView.addItemDecoration(RecyclerViewDivider.with(requireContext())
+            .inset(dip(16), dip(16))
             .size(dip(2))
-            .hideLastDivider()
-            .build(), onScrolledToEnd = {
-            viewModel.fetchMoreRecipes()
+            .color(Color.BLACK)
+            .build())
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        epoxyRecyclerView.setController(recipesController)
+        addEpoxyDivider()
+        viewModel.observeState().observe(viewLifecycleOwner, Observer { state ->
+            when (state) {
+                is State.Empty -> {
+                    showProgress(false)
+                    showEmptyLayout(true)
+                }
+                is State.Loading -> {
+                    showProgress(true)
+                    showEmptyLayout(false)
+                }
+                is State.Reloading -> {
+                    addRecipes(state.previousData ?: emptyList())
+                    showEmptyLayout(false)
+                }
+                is State.Loaded -> {
+                    showProgress(false)
+                    showEmptyLayout(false)
+                    addRecipes(state.data)
+                }
+                is State.Error -> {
+                    showProgress(false)
+                    showEmptyLayout(false)
+                    view.longSnackbar(state.error.toString())
+                }
+            }
         })
-
-    override fun ListLayout.viewCreated(savedState: Bundle?) {
-        disposables += viewModel.observeState()
-            .observeOnMainThread()
-            .subscribe { state ->
-                when (state) {
-                    is State.Empty -> {
-                        showProgress(false)
-                        showEmpty(true)
-                        showError(false)
-                    }
-                    is State.Loading -> {
-                        showProgress(true)
-                        showEmpty(false)
-                        showError(false)
-                    }
-                    is State.Reloading -> {
-                        showProgress(true)
-                        showEmpty(false)
-                        showError(false)
-                        addRecipes(state.previousData ?: emptyList())
-                    }
-                    is State.Loaded -> {
-                        showProgress(false)
-                        showEmpty(false)
-                        showError(false)
-                        addRecipes(state.data)
-                    }
-                    is State.Error -> {
-                        showProgress(false)
-                        showEmpty(false)
-                        showError(true)
-                        view.longSnackbar(state.error.toString())
-                    }
-                }
-            }
-
-        disposables += viewModel.observeLoadingState()
-            .observeOnMainThread()
-            .subscribe {
-                if (it is State.Loading) {
-                    recipesController.isLoading = true
-                }
-                if (it is State.Loaded) {
-                    recipesController.isLoading = false
-                    //if true, we are at last page, so disable infinite loading
-                    setContinueLoading(!it.data)
-                    showProgress(false)
-                }
-                if (it is State.Error) {
-                    recipesController.isLoading = false
-                    showProgress(false)
-                }
-            }
     }
 
     private fun addRecipes(recipes: List<Recipe>) {
         recipesController.recipes = recipes
+    }
+
+    fun showProgress(show: Boolean) {
+        progressBar.isVisible = show
+    }
+
+    fun showEmptyLayout(show: Boolean) {
+        empty_layout.isVisible = show
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

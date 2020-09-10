@@ -12,7 +12,7 @@ data class Recipe(
     @PrimaryKey
     val id: String,
     val name: String,
-    val duration: Int,
+    val duration: String,
     val score: Float,
     var description: String?,
     var ingredients: List<String>?

@@ -6,4 +6,8 @@
     <item name="epoxy_view_layout" type="id"/>
     <item name="constraint_layout" type="id"/>
     <item name="linear_layout" type="id"/>
+    <item name="button_start" type="id" />
+    <item name="button_moving" type="id" />
+    <item name="button_end" type="id" />
+    <item name="franta_layout" type="id" />
 </resources>

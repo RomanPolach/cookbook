@@ -11,7 +11,7 @@ import retrofit2.http.Body
  */
 class ApiInteractorImpl(private val apiDescription: ApiDescription) : ApiInteractor {
 
-    override suspend fun getRecipeListPaged(perPage: Int, offset: Int): List<Recipe> = apiDescription.getRecipesPaged(perPage, offset).await()
+    override suspend fun getRecipeList(): List<Recipe> = apiDescription.getRecipesPaged().await()
 
     override suspend fun sendRecipe(recipe: NewRecipeRequest): Recipe = apiDescription.sendRecipe(recipe).await()
 

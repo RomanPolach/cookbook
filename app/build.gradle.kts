@@ -97,9 +97,9 @@ dependencies {
     implementation("androidx.room:room-runtime:2.0.0")
     implementation("androidx.room:room-rxjava2:2.0.0")
     kapt("androidx.room:room-compiler:2.0.0")
-    implementation("cz.ackee:anko-constraint-layout:1.1.2")
-    implementation("androidx.constraintlayout:constraintlayout:1.1.3")
+    implementation("androidx.constraintlayout:constraintlayout:2.0.0-beta2")
     implementation("androidx.core:core-ktx:1.0.0")
+    implementation("cz.ackee:anko-constraint-layout:0.6.7")
 
     // Firebase
     implementation("com.google.firebase:firebase-core:16.0.7")

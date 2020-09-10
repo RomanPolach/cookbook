@@ -5,6 +5,7 @@ import cz.ackee.cookbook.model.api.db.RecipeDao
 import cz.ackee.cookbook.model.api.exception.resolveException
 import cz.ackee.cookbook.model.interactor.ApiInteractor
 import io.reactivex.Flowable
+import io.reactivex.Single
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -14,7 +15,7 @@ import kotlinx.coroutines.withContext
 interface RecipeRepository {
 
     // Get obbservable for loading data
-    suspend fun getRecipeListObservable(): Flowable<List<Recipe>>
+    fun getRecipeListObservable(): Flowable<List<Recipe>>
 
     //rate Recipe
     suspend fun rateRecipe(recipeId: String, rating: Float): Recipe
@@ -29,36 +30,26 @@ interface RecipeRepository {
     //fetch data from remote repository
     suspend fun fetchRecipeDetail(recipeId: String)
 
-    // fetch recipes by pages
-    suspend fun fetchRecipeListPaged(recipeListOffset: Int)
-
-    fun isAtTheEndOfList(): Boolean
+    // fetch recipes
+    suspend fun fetchRecipeList()
 }
 
 class RecipeRepositoryImpl(val apiInteractor: ApiInteractor, val recipeDao: RecipeDao) : RecipeRepository {
-    var endOfRecipesListReached = false
-    val RECIPE_LIST_PER_PAGE = 5
 
-    suspend override fun getRecipeListObservable(): Flowable<List<Recipe>> {
+    override fun getRecipeListObservable(): Flowable<List<Recipe>> {
         return recipeDao.getRecipes()
     }
 
-    suspend override fun fetchRecipeListPaged(recipeListOffset: Int) {
+    suspend override fun fetchRecipeList() {
         try {
-            val recipes = apiInteractor.getRecipeListPaged(RECIPE_LIST_PER_PAGE, recipeListOffset)
-            if (recipes.size < RECIPE_LIST_PER_PAGE) {
-                endOfRecipesListReached = true
-            }
+            val recipes = apiInteractor.getRecipeList()
+
             withContext(Dispatchers.IO) {
                 recipeDao.insertAllRecipes(recipes)
             }
         } catch (e: Exception) {
             throw resolveException(e)
         }
-    }
-
-    override fun isAtTheEndOfList(): Boolean {
-        return endOfRecipesListReached
     }
 
     suspend override fun sendRecipe(recipeDescription: String, name: String, intro: String, time: String,

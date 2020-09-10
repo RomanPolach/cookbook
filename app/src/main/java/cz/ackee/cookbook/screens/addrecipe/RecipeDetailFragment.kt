@@ -1,12 +1,14 @@
 package cz.ackee.cookbook.screens.addrecipe
 
-import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import cz.ackee.cookbook.R
 import cz.ackee.cookbook.model.api.Recipe
 import cz.ackee.cookbook.model.repository.State
@@ -18,12 +20,9 @@ import cz.ackee.cookbook.screens.recipedetail.RecipeDetailViewModel
 import cz.ackee.cookbook.screens.recipedetail.ingredientDetail
 import cz.ackee.cookbook.utils.withModels
 import cz.ackee.extensions.android.color
-import cz.ackee.extensions.android.visible
-import cz.ackee.extensions.rx.observeOnMainThread
-import io.reactivex.rxkotlin.plusAssign
+import kotlinx.android.synthetic.main.fragment_detail.*
 
 import org.jetbrains.anko.design.longSnackbar
-import org.jetbrains.anko.design.snackbar
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -42,56 +41,55 @@ class RecipeDetailFragment : BaseFragment<RecipeDetailLayout>() {
         fun arguments(recipeId: String) = bundleOf(RECIPE_ID_KEY to recipeId)
     }
 
-    override fun createLayout(parent: Context) = RecipeDetailLayout(parent)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_detail, container, false)
+    }
 
-    override fun RecipeDetailLayout.viewCreated(savedState: Bundle?) {
-        setStatusBar(false)
-        scoreBottomRatingBar.setOnRatingChangeListener { ratingBar, rating, fromUser ->
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        detailrecyclerview?.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+
+        viewModel.detailState().observe(viewLifecycleOwner, Observer { state ->
+            when (state) {
+                is State.Loaded -> showRecipe(state.data)
+                is State.Error -> view.longSnackbar(R.string.detail_loading_failed)
+            }
+        })
+
+        viewModel.ratingState().observe(viewLifecycleOwner, Observer { state ->
+            when (state) {
+                is State.Loaded -> view.longSnackbar(R.string.recipe_detail_recipe_rated)
+                is State.Error -> view.longSnackbar(R.string.recipe_detail_rating_failed)
+            }
+        })
+
+        viewModel.ratingAllowedState().observe(viewLifecycleOwner, Observer { allowed ->
+            ratingbar_rate?.isVisible = allowed
+            view_rate?.isVisible = allowed
+            text_rate_this?.isVisible = allowed
+        })
+
+        ratingbar_rate.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
             viewModel.onUserRatingClick(rating)
         }
+        setStatusBar(false)
+    }
 
-        disposables += viewModel.observeState()
-            .observeOnMainThread()
-            .subscribe { state ->
-                when (state) {
-                    is State.Loading -> view.longSnackbar(R.string.general_loading)
-                    is State.Loaded -> {
-                        showRecipeDetail(state.data)
-                    }
-                    is State.Error -> {
-                        view.longSnackbar(state.error.toString())
-                    }
+    private fun showRecipe(recipe: Recipe) {
+        ratingbar?.rating = recipe.score
+        txtTitle?.text = recipe.name
+        text_intro?.text = recipe.description
+        text_time?.text = "${recipe.duration} min."
+        text_description?.text = recipe.description
+
+        detailrecyclerview?.withModels {
+            recipe.ingredients?.forEach {
+                ingredientDetail {
+                    id(it)
+                    title(it)
                 }
             }
-
-        disposables += viewModel.observerRatingState()
-            .observeOnMainThread()
-            .subscribe { state ->
-                when (state) {
-                    is State.Loading -> {
-                        scoreBottomRatingBar.setIsIndicator(true)
-                        view.snackbar(R.string.general_sending)
-                    }
-                    is State.Loaded -> {
-                        view.longSnackbar(R.string.recipe_detail_recipe_rated)
-                    }
-                    is State.Error -> {
-                        view.longSnackbar(state.error.toString())
-                        //if request failed, enable rating bar again
-                        scoreBottomRatingBar.setIsIndicator(false)
-                    }
-                }
-            }
-
-        disposables += viewModel.observeRatingAllowedState()
-            .observeOnMainThread()
-            .subscribe { state ->
-                if (state is State.Loaded) {
-                    if (!state.data) {
-                        layout.frameLayoutRating.visible = false
-                    }
-                }
-            }
+        }
     }
 
     // Method that enables collapsing toolbar be drawn under status bar and change status bar icons
@@ -121,25 +119,6 @@ class RecipeDetailFragment : BaseFragment<RecipeDetailLayout>() {
         win.attributes = winParams
     }
 
-    private fun showRecipeDetail(recipe: Recipe) {
-        with(layout) {
-            txtRecipeTitle.text = recipe.name
-            txtRecipeDescription.text = recipe.description
-            txtRecipeIntro.text = recipe.description
-            txtTime.text = "${recipe.duration} ${getString(R.string.main_fragment_minutes)}"
-            scoreRatingBar.rating = recipe.score
-
-            recyclerViewIngredients.withModels {
-                recipe.ingredients?.forEach {
-                    ingredientDetail {
-                        id(it)
-                        title(it)
-                    }
-                }
-            }
-        }
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.add_recipe -> {
@@ -162,5 +141,5 @@ class RecipeDetailFragment : BaseFragment<RecipeDetailLayout>() {
         actionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
-    override fun getTitle() = getString(R.string.add_recipe_toolbar_title)
+    override fun getTitle() = getString(R.string.add_recipe_recipe_hint)
 }

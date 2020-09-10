@@ -1,7 +1,10 @@
 package cz.ackee.cookbook.screens.addrecipe
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import cz.ackee.cookbook.model.api.Recipe
 import cz.ackee.cookbook.model.repository.RecipeRepository
+import cz.ackee.cookbook.model.repository.State
 import cz.ackee.cookbook.model.repository.StateObserver
 import cz.ackee.cookbook.model.validation.ValidationException
 import cz.ackee.cookbook.screens.base.viewmodel.ScopedViewModel
@@ -13,23 +16,23 @@ import kotlinx.coroutines.launch
 class AddRecipeViewModel(val repository: RecipeRepository) : ScopedViewModel() {
 
     private val ingredientsList: MutableList<String> = mutableListOf()
-    private val addRecipeStateObserver = StateObserver<Recipe>()
+    private val addRecipeStateObserver = MutableLiveData<State<Recipe>>()
 
-    fun observeState() = addRecipeStateObserver.observeState()
+    fun observeState(): LiveData<State<Recipe>> = addRecipeStateObserver
 
     fun onSendRecipeClick(recipe: String, name: String, intro: String, time: String) {
         val validationError = validate(recipe, name, intro, time)
         if (validationError == null) {
             launch {
-                addRecipeStateObserver.loading()
+                addRecipeStateObserver.postValue(State.Loading)
                 try {
-                    addRecipeStateObserver.loaded(repository.sendRecipe(recipe, name, intro, time, ingredientsList))
+                    addRecipeStateObserver.postValue(State.Loaded(repository.sendRecipe(recipe, name, intro, time, ingredientsList)))
                 } catch (e: Exception) {
-                    addRecipeStateObserver.error(e)
+                    addRecipeStateObserver.postValue(State.Error(e))
                 }
             }
         } else {
-            addRecipeStateObserver.error(validationError)
+            addRecipeStateObserver.postValue(State.Error(validationError))
         }
     }
 
@@ -40,14 +43,14 @@ class AddRecipeViewModel(val repository: RecipeRepository) : ScopedViewModel() {
     fun getIngredients() = ingredientsList
 
     private fun validate(recipe: String, name: String, intro: String, time: String): ValidationException? {
-        if (!recipe.isBlank() &&
+        return if (!recipe.isBlank() &&
             !name.isBlank() &&
             !intro.isBlank() &&
-            !time.isEmpty() &&
-            !ingredientsList.isEmpty()) {
-            return null
+            time.isNotEmpty() &&
+            ingredientsList.isNotEmpty()) {
+            null
         } else {
-            return (ValidationException(ValidationException.ValidationErrorType.EMPTY_FIELD))
+            (ValidationException(ValidationException.ValidationErrorType.EMPTY_FIELD))
         }
     }
 }

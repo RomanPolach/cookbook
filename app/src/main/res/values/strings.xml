@@ -10,6 +10,8 @@
     <string name="add_recipe_button_add_title">Přidat</string>
     <string name="add_recipe_input_intro_text">Úvodní text</string>
     <string name="add_recipe_recipe_hint">Návod</string>
+    <string name="empty_recipes">Žádné recepty nejsou</string>
+    <string name="detail_loading_failed">Načítání receptu se nepodařilo</string>
     <string name="add_recipe_time_hint">Čas</string>
     <string name="add_recipe_dialog_fill_all_fields">Vyplňte všechna pole</string>
     <string name="add_recipe_message_loaded_successfully">Recept byl nahrán úspěšně</string>
@@ -17,4 +19,6 @@
     <string name="recipe_detail_food_preparation_title">Příprava jídla</string>
     <string name="recipe_detail_rate_this_title">Ohodnoť tento recept</string>
     <string name="recipe_detail_recipe_rated">Vaše hodnocení bylo uloženo</string>
+    <string name="recipe_detail_rating_failed">Nepodařilo se ohodnotit recept</string>
+    <string name="add_recipe_failed">Přidání receptu se nepodařilo</string>
 </resources>

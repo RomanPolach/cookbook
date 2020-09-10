@@ -2,11 +2,15 @@ package cz.ackee.cookbook.screens.addrecipe
 
 import android.content.Context
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.Observer
 import cz.ackee.cookbook.R
 import cz.ackee.cookbook.model.repository.State
 import cz.ackee.cookbook.model.validation.ValidationException
@@ -25,29 +29,29 @@ class AddRecipeFragment : BaseFragment<AddRecipeLayout>() {
 
     private val viewModel: AddRecipeViewModel by viewModel()
 
-    override fun createLayout(parent: Context) = AddRecipeLayout(parent)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        super.onCreateView(inflater, container, savedInstanceState)
+        return AddRecipeLayout(container!!.context).also { layout = it }.view
+    }
 
-    override fun AddRecipeLayout.viewCreated(savedState: Bundle?) {
-        btnAdd.onClick {
-            viewModel.onAddIngredient(inputIngredient.editText!!.text.toString())
-            inputIngredient.editText!!.text.clear()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        layout.btnAdd.onClick {
+            viewModel.onAddIngredient(layout.inputIngredient.editText!!.text.toString())
+            layout.inputIngredient.editText!!.text.clear()
             refreshIngredientsList()
         }
 
-        disposables += viewModel.observeState()
-            .observeOnMainThread()
-            .subscribe { state ->
-                when (state) {
-                    is State.Loading -> view.longSnackbar(R.string.general_sending)
-                    is State.Loaded -> {
-                        view.longSnackbar(R.string.add_recipe_message_loaded_successfully)
-                        activity!!.onBackPressed()
-                    }
-                    is State.Error -> {
-                        handleErrors(state.error)
-                    }
+        viewModel.observeState().observe(viewLifecycleOwner, Observer { state ->
+            when (state) {
+                is State.Loading -> view.longSnackbar(R.string.general_sending)
+                is State.Loaded -> {
+                    view.longSnackbar(R.string.add_recipe_message_loaded_successfully)
+                    activity!!.onBackPressed()
                 }
+                is State.Error -> handleErrors(state.error)
             }
+        })
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -64,13 +68,13 @@ class AddRecipeFragment : BaseFragment<AddRecipeLayout>() {
         inflater.inflate(R.menu.menu_main, menu)
     }
 
-    fun AddRecipeLayout.handleErrors(error: Throwable) {
+    fun handleErrors(error: Throwable) {
         if (error is ValidationException) {
             when (error.error) {
-                ValidationException.ValidationErrorType.EMPTY_FIELD -> view.longSnackbar(R.string.add_recipe_dialog_fill_all_fields)
+                ValidationException.ValidationErrorType.EMPTY_FIELD -> view?.longSnackbar(R.string.add_recipe_dialog_fill_all_fields)
             }
         } else {
-            view.longSnackbar(error.toString())
+            view?.longSnackbar(error.toString())
         }
     }
 

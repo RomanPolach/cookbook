@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.airbnb.epoxy.EpoxyAttribute
 import com.willy.ratingbar.ScaleRatingBar
 import cz.ackee.ankoconstraintlayout.constraintLayout
@@ -33,7 +34,6 @@ open class RecipeEpoxyModel : EpoxyModelWithLayout<RecipeLayout>() {
     override fun RecipeLayout.bind() {
         txtTitle.text = recipeItem.name
         txtTime.text = "${recipeItem.duration} ${view.context.getString(R.string.main_fragment_minutes)}"
-        //round to 0.5
         scoreRatingBar.rating = recipeItem.score
         view.setOnClickListener {
             onRecipeClick(recipeItem.id)
@@ -57,7 +57,7 @@ class RecipeLayout(parent: ViewGroup) : ViewLayout(parent) {
 
                 txtTitle = titleTextView {
                     topPadding = dip(25)
-                }.lparams(width = wrapContent)
+                }.lparams(matchConstraint, wrapContent)
 
                 val imgLogo = imageView(R.drawable.img_logo_small) {
                     verticalPadding = dip(20)
@@ -79,24 +79,24 @@ class RecipeLayout(parent: ViewGroup) : ViewLayout(parent) {
                 }
 
                 constraints {
-                    imgLogo.connect(
-                        STARTS of parentId,
-                        TOPS of parentId
-                    )
+                    imgLogo.connect(TOPS of parentId,
+                        BOTTOMS of parentId,
+                        LEFTS of parentId with dip(10))
 
                     txtTitle.connect(
-                        TOPS of imgLogo,
-                        START to END of imgLogo with dip(16)
+                        LEFT to RIGHT of imgLogo with dip(20),
+                        RIGHTS of parentId with dip(20),
+                        TOPS of imgLogo
                     )
 
                     scoreRatingBar.connect(
-                        TOP to BOTTOM of txtTitle with dip(5),
-                        START to END of imgLogo with dip(16)
+                        TOP to BOTTOM of txtTitle,
+                        LEFT to RIGHT of imgLogo with dip(20)
                     )
 
                     txtTime.connect(
-                        START to END of imgLogo with dip(16),
-                        BOTTOM to BOTTOM of imgLogo with dip(25)
+                        TOP to BOTTOM of scoreRatingBar,
+                        LEFT to RIGHT of imgLogo with dip(20)
                     )
                 }
             }

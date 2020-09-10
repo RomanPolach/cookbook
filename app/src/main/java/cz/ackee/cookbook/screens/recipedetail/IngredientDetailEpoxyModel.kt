@@ -11,8 +11,10 @@ import cz.ackee.extensions.anko.layout.ViewLayout
 import cz.ackee.extensions.epoxy.EpoxyModelWithLayout
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.dip
+import org.jetbrains.anko.matchParent
 import org.jetbrains.anko.textView
 import org.jetbrains.anko.verticalPadding
+import org.jetbrains.anko.wrapContent
 
 /**
  * EpoxyModel for ingredients list in Recipe Detail
@@ -36,6 +38,7 @@ class IngredientDetailEpoxyLayout(parent: ViewGroup) : ViewLayout(parent) {
     override fun createView(ui: AnkoContext<Context>): View {
         return with(ui) {
             textView {
+                layoutParams = ViewGroup.LayoutParams(matchParent, wrapContent)
                 drawableLeft = R.drawable.dot_shape
                 compoundDrawablePadding = dip(20)
                 verticalPadding = dip(20)
@@ -43,5 +46,3 @@ class IngredientDetailEpoxyLayout(parent: ViewGroup) : ViewLayout(parent) {
         }
     }
 }
-
-
